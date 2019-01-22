@@ -3,69 +3,62 @@ package com.example.demo.service.impl;
 import com.example.demo.dao.UserDao;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
-import com.example.demo.utilty.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
-@Service(value = "UserEntityService")
+@Service(value = "userService")
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserDao UserEntityDao;
+    UserDao userDao;
+
 
     @Override
-    public List<UserEntity> findAll() {
-        return UserEntityDao.list();
+    public UserEntity queryObject(Long id) {
+        return userDao.queryObject(id);
     }
 
     @Override
-    public UserEntity findById(int id) {
-        return UserEntityDao.findById(id);
+    public List<UserEntity> queryList(Map<String, Object> map) {
+        return userDao.queryList(map);
     }
 
     @Override
-    public void addUserEntity(UserEntity UserEntity) {
-        UserEntityDao.addUser(UserEntity);
+    public int queryTotal(Map<String, Object> map) {
+        return userDao.queryTotal(map);
     }
 
     @Override
-    public void updateUserEntity(UserEntity UserEntity) {
-        UserEntityDao.updateUser(UserEntity);
+    public void save(UserEntity user) {
+        userDao.save(user);
     }
 
     @Override
-    public void deleteUserEntity(UserEntity UserEntity) {
-        UserEntityDao.deleteUser(UserEntity);
+    public void update(UserEntity user) {
+        userDao.update(user);
     }
 
     @Override
-    public List<UserEntity> paging(Page page) {
-        return UserEntityDao.list(page);
+    public void delete(Long id) {
+        userDao.delete(id);
     }
 
     @Override
-    public int total() {
-        return UserEntityDao.total();
+    public List<String> queryAllPerms(Long id) {
+        return userDao.queryAllPerms(id);
     }
 
     @Override
-    public List<UserEntity> likeUserEntity(Page page) {
-        return UserEntityDao.likeUser(page);
+    public List<String> queryAllRoles(Long id) {
+        return userDao.queryAllRoles(id);
     }
 
     @Override
-    public int likeTotal(String name) {
-        return UserEntityDao.likeTotal(name);
+    public UserEntity queryByName(String name) {
+        return userDao.queryByName(name);
     }
-
-    @Override
-    public UserEntity findByName(String name) {
-
-        return UserEntityDao.findByName(name);
-    }
-
-
 }

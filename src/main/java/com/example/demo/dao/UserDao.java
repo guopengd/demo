@@ -1,7 +1,6 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.UserEntity;
-import com.example.demo.utilty.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,23 +8,10 @@ import java.util.List;
 @Service
 public interface UserDao extends BaseDao<UserEntity> {
 
-    List<UserEntity> list();
+    UserEntity queryByName(String name);
 
-    UserEntity findById(int i);
+    List<String> queryAllPerms(Long id);
 
-    UserEntity findByName(String name);
+    List<String> queryAllRoles(Long id);
 
-    void addUser(UserEntity user);
-
-    void updateUser(UserEntity user);
-
-    void deleteUser(UserEntity user);
-
-    int total();
-
-    int likeTotal(String name);
-
-    List<UserEntity> list(Page page);
-
-    List<UserEntity> likeUser(Page page);
 }

@@ -1,20 +1,19 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String name;
+    private String userName;
     private String password;
-    private int state;
-
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", name=" + name + ", password=" + password + ", state=" + state + "]";
-    }
+    private Integer status;
+    private String email;
+    private String phone;
+    private Date createDate;
 
     public Long getId() {
         return id;
@@ -24,12 +23,12 @@ public class UserEntity implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -40,19 +39,48 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public int getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public void change() {
-        if (state == 1)
-            state = 2;
-        else if (state == 2)
-            state = 1;
+    public String getEmail() {
+        return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", status=" + status +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", createDate=" + createDate +
+                '}';
+    }
 }

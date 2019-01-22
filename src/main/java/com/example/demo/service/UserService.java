@@ -1,31 +1,79 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserEntity;
-import com.example.demo.utilty.Page;
 
 import java.util.List;
+import java.util.Map;
 
-
+/**
+ * 登录用户类
+ */
 public interface UserService {
 
-    List<UserEntity> findAll();
+    /**
+     * 通过id查询用户
+     *
+     * @param id
+     * @return
+     */
+    UserEntity queryObject(Long id);
 
-    UserEntity findById(int id);
+    /**
+     * 通过name查询用户
+     *
+     * @param name
+     * @return
+     */
+    UserEntity queryByName(String name);
 
-    UserEntity findByName(String name);
+    /**
+     * 查询用户列表
+     *
+     * @param map
+     * @return
+     */
+    List<UserEntity> queryList(Map<String, Object> map);
 
-    void addUserEntity(UserEntity UserEntity);
+    /**
+     * 查询用户总数
+     *
+     * @param map
+     * @return
+     */
+    int queryTotal(Map<String, Object> map);
 
-    void updateUserEntity(UserEntity UserEntity);
+    /**
+     * 保存用户信息
+     *
+     * @param user
+     */
+    void save(UserEntity user);
 
-    void deleteUserEntity(UserEntity UserEntity);
+    /**
+     * 更新用户信息
+     *
+     * @param user
+     */
+    void update(UserEntity user);
 
-    int total();
+    /**
+     * 删除用户信息
+     *
+     * @param id
+     */
+    void delete(Long id);
 
-    List<UserEntity> paging(Page page);
+    /**
+     * 获取用户所有权限操作符
+     *
+     * @param id
+     */
+    List<String> queryAllPerms(Long id);
 
-    public List<UserEntity> likeUserEntity(Page page);
-
-    int likeTotal(String name);
-
+    /**
+     * 获取用户所有角色
+     *
+     * @param id
+     */
+    List<String> queryAllRoles(Long id);
 }

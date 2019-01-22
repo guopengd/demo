@@ -3,8 +3,8 @@ package com.example.demo.utilty;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/*
- *Dao层查询工具
+/**
+ * Dao层查询工具
  */
 public class Query extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = 1L;
