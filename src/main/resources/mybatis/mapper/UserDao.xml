@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.UserDao">
+    <select id="list" resultType="UserEntity">
+        select ID,NAME,PASSWORD,STATE from s_user order by ID desc
+        <if test="start!=null and count!=null">
+            limit (#{start} - 1)* #{count},#{start} * #{count}
+        </if>
+    </select>
+
+    <select id="findById" parameterType="int" resultType="UserEntity">
+        select ID,NAME,PASSWORD,STATE from s_user where ID = #{id}
+    </select>
+
+    <select id="findByName" parameterType="String" resultType="UserEntity">
+        select ID,NAME,PASSWORD,STATE from s_user where NAME = #{name}
+    </select>
+
+    <insert id="addUser" parameterType="UserEntity">
+        insert into s_user (ID,NAME,PASSWORD,STATE) values(s_user_seq.nextval,#{name},#{password},#{state})
+    </insert>
+
+    <update id="updateUser" parameterType="UserEntity">
+        update s_user set NAME = #{name},PASSWORD = #{password},STATE = ${state} where ID = #{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="UserEntity">
+        delete s_user where ID = #{id}
+    </delete>
+    <select id="total" resultType="int">
+        select count(*) from s_user
+    </select>
+
+    <select id="likeUser" resultType="UserEntity">
+        <![CDATA[
+
+                   select * from (select a.*,rownum rn from s_user a where name like '%'||#{name}||'%' order by ID) where rn > (#{start} - 1)* #{count} and rn <= #{start} * #{count}
+
+        ]]>
+    </select>
+
+    <select id="likeTotal" resultType="int" parameterType="String">
+        select count(*) from s_user where name like '%'||#{name}||'%'
+    </select>
+</mapper>

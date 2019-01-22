@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.LogDao">
+
+    <select id="queryObject" resultType="LogEntity">
+        select
+        `id` as `id`,
+        `username` as `username`,
+        `operation` as `operation`,
+        `method` as `method`,
+        `params` as `params`,
+        `ip` as `ip`,
+        `create_date` as `createDate`
+        from `sys_log` where `id` = #{value}
+    </select>
+
+    <select id="queryList" resultType="LogEntity">
+        select
+        `id` as `id`,
+        `username` as `username`,
+        `operation` as `operation`,
+        `method` as `method`,
+        `params` as `params`,
+        `ip` as `ip`,
+        `create_date` as `createDate`
+        from `sys_log`
+        <where>
+            <if test="username != null and username.trim() != ''">
+                AND username like concat('%',#{username},'%')
+            </if>
+            <if test="operation != null and operation.trim() != ''">
+                AND operation like concat('%',#{operation},'%')
+            </if>
+            <if test="method != null and method.trim() != ''">
+                AND method like concat('%',#{method},'%')
+            </if>
+            <if test="params != null and params.trim() != ''">
+                AND params like concat('%',#{params},'%')
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by `id` desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and rows != null">
+            limit #{offset}, #{rows}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from `sys_log`
+        <where>
+            <if test="username != null and username.trim() != ''">
+                AND username like concat('%',#{username},'%')
+            </if>
+            <if test="operation != null and operation.trim() != ''">
+                AND operation like concat('%',#{operation},'%')
+            </if>
+            <if test="method != null and method.trim() != ''">
+                AND method like concat('%',#{method},'%')
+            </if>
+            <if test="params != null and params.trim() != ''">
+                AND params like concat('%',#{params},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="LogEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into `sys_log`
+        (
+        `username`,
+        `operation`,
+        `method`,
+        `params`,
+        `ip`,
+        `create_date`
+        )
+        values
+        (
+        #{username},
+        #{operation},
+        #{method},
+        #{params},
+        #{ip},
+        #{createDate}
+        )
+    </insert>
+    <insert id="saveBatch" parameterType="map" useGeneratedKeys="true">
+        insert into `sys_log`
+        (
+        `username`,
+        `operation`,
+        `method`,
+        `params`,
+        `ip`,
+        `create_date`
+        )
+        values
+        <foreach collection="list" item="record" index="index" separator=",">
+            (
+            #{record.username},
+            #{record.operation},
+            #{record.method},
+            #{record.params},
+            #{record.ip},
+            #{record.createDate}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="LogEntity">
+        update `sys_log`
+        <set>
+            <if test="username != null">`username` = #{username},</if>
+            <if test="operation != null">`operation` = #{operation},</if>
+            <if test="method != null">`method` = #{method},</if>
+            <if test="params != null">`params` = #{params},</if>
+            <if test="ip != null">`ip` = #{ip}</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from `sys_log` where `id` = #{value}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from `sys_log` where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysLog">
+        DELETE FROM `sys_log` WHERE TO_DAYS(NOW()) - TO_DAYS(`create_date`) <![CDATA[>]]> #{days}
+    </delete>
+</mapper>
