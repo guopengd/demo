@@ -30,7 +30,7 @@ public class Chapter6ApplicationTests {
 
         List<UserEntity> userMap = new ArrayList<>();
         UserEntity user = new UserEntity();
-        user.setName("yukong");
+        user.setUserName("yukong");
         user.setPassword("dfssf");
         user.setId(1L);
         userMap.add(user);

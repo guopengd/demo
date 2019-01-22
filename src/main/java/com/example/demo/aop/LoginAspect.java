@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.demo.annotation.SysLog;
 import com.example.demo.entity.LogEntity;
 import com.example.demo.service.LogService;
+import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.utilty.AspectCode;
 import com.example.demo.utilty.CusAccessObjectUtil;
 import org.aspectj.lang.JoinPoint;
@@ -98,12 +99,7 @@ public class LoginAspect {
         sysLog.setIp(CusAccessObjectUtil.getIpAddress(request));
 
         // 用户名
-        String userName = null;
-        if (request.getSession().getAttribute("username") != null) {
-            userName = request.getSession().getAttribute("username").toString();
-        }
-        // String username = ShiroUtils.getUserEntity().getUsername();
-        sysLog.setUsername(userName);
+        String username = ShiroUtils.getUserEntity().getUserName();
 
         sysLog.setCreateDate(new Date());
         // 保存系统日志

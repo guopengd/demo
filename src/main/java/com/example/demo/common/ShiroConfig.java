@@ -2,8 +2,6 @@ package com.example.demo.common;
 
 
 import com.example.demo.shiro.CustomRealm;
-import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -59,14 +57,6 @@ public class ShiroConfig {
         DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setUsePrefix(true);
         return defaultAdvisorAutoProxyCreator;
-    }
-
-    /**
-     * 配置shiro的缓存管理
-     */
-    @Bean
-    protected CacheManager cacheManager() {
-        return new MemoryConstrainedCacheManager();
     }
 
 }

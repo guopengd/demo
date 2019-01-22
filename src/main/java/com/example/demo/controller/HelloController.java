@@ -34,12 +34,8 @@ public class HelloController {
         return Res.ok().put("list", list);
     }
 
-    @SysLog("login")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Map login(UserEntity user) {
-
-
-
 
         Map<String, String> hashMap = new HashMap<>();
         String token = (String) redisTemplate.opsForValue().get("token");
