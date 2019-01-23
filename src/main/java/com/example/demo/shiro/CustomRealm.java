@@ -1,6 +1,5 @@
 package com.example.demo.shiro;
 
-import com.example.demo.dao.UserDao;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.impl.UserServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -14,7 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class CustomRealm extends AuthorizingRealm {
@@ -36,6 +38,7 @@ public class CustomRealm extends AuthorizingRealm {
         //从数据库中获取对应用户名的密码
         UserEntity user = userService.queryByName(userName);
         //验证账号是否正确
+        logger.info("==================开始账号验证===================");
         if (user == null) {
             throw new UnknownAccountException("账号不存在");
         }
@@ -46,6 +49,7 @@ public class CustomRealm extends AuthorizingRealm {
             throw new LockedAccountException("账号已被冻结");
         }
 
+        logger.info("==================账号验证完成===================");
         return new SimpleAuthenticationInfo(user, password, "CustomRealm");
     }
 
@@ -61,6 +65,7 @@ public class CustomRealm extends AuthorizingRealm {
         List<String> permsList;
         Set<String> permsSet = new HashSet<>();
 
+        logger.info("==================开始获取权限操作符===================");
         // 获取redis中的缓存的权限操作符
         String redisPerms = (String) redisTemplate.opsForValue().get("shiro_perms_" + id);
 
@@ -85,6 +90,8 @@ public class CustomRealm extends AuthorizingRealm {
             //redis中有缓存则将其取出放入set集合
             permsSet.addAll(Arrays.asList(redisPerms.trim().split(",")));
         }
+
+        logger.info("==================获取权限操作符成功===================");
         //将set集合放入SimpleAuthorizationInfo中
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addStringPermissions(permsSet);

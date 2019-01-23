@@ -50,7 +50,7 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(customRealm);
         //注入缓存管理器;
-        securityManager.setCacheManager(getCacheManager());//这个如果执行多次，也是同样的一个对象;
+        securityManager.setCacheManager(getCacheManager());//这个如果执行多次，也是同样的一个对象;详情请看RedisConfig
         return securityManager;
     }
 
@@ -91,7 +91,8 @@ public class ShiroConfig {
     }
 
     /**
-     * Shiro的Web过滤器Factory 命名:shiroFilter<br /> * * @param securityManager * @return
+     * Shiro的Web过滤器Factory 命名:shiroFilter
+     * @param securityManager * @return
      */
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {

@@ -51,7 +51,6 @@ public class HelloController extends BaseController {
             password = new Sha256Hash(password).toHex();
             UsernamePasswordToken loginToken = new UsernamePasswordToken(userName, password);
             subject.login(loginToken);
-
             //获取登录用户主体
             UserEntity shiroUser = (UserEntity) subject.getPrincipal();
             //生成token返回前端
