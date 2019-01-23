@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class RouteController {
+public class RouteController extends BaseController {
 /*
     @RequestMapping("/{name}")
     public String roter(@PathVariable("name") String name) {

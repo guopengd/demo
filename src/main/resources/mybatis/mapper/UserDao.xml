@@ -14,6 +14,18 @@
         from `sys_user` where `id` = #{value}
     </select>
 
+    <select id="queryByName" resultType="UserEntity">
+        select
+        `id` as `id`,
+        `username` as `username`,
+        `password` as `password`,
+        `status` as `status`,
+        `email` as `email`,
+        `phone` as `phone`,
+        `create_date` as `createDate`
+        from `sys_user` where `username` = #{username}
+    </select>
+
     <select id="queryList" resultType="UserEntity">
         select
         `id` as `id`,

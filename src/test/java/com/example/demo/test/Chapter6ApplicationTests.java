@@ -38,6 +38,7 @@ public class Chapter6ApplicationTests {
         redisTemplate.opsForValue().set(userKey, userMap);
         List newUser = (List) redisTemplate.opsForValue().get(userKey);
         System.out.println("获取缓存中key为" + userKey + "的值为：" + newUser);
+        redisTemplate.delete("yukong");
     }
 
 }
