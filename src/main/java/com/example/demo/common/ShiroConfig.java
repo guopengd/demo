@@ -92,6 +92,7 @@ public class ShiroConfig {
 
     /**
      * Shiro的Web过滤器Factory 命名:shiroFilter
+     *
      * @param securityManager * @return
      */
     @Bean(name = "shiroFilter")
@@ -100,6 +101,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //Shiro的核心安全接口,这个属性是必须的
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+
         //要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         //登录成功后要跳转的连接,逻辑也可以自定义，例如返回上次请求的页面
@@ -114,9 +116,8 @@ public class ShiroConfig {
          */
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/**", "anon");
-
+        // 因本人设置了在退出时清除redis缓存，所以不用此方法
+        // filterChainDefinitionMap.put("/logout", "logout");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;

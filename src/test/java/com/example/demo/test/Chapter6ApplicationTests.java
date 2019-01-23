@@ -1,6 +1,7 @@
 package com.example.demo.test;
 
 import com.example.demo.entity.UserEntity;
+import com.example.demo.utilty.RedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class Chapter6ApplicationTests {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Test
     public void redisTest() {
@@ -41,4 +44,8 @@ public class Chapter6ApplicationTests {
         redisTemplate.delete("yukong");
     }
 
+    @Test
+    public void RedisUtilTest() {
+        redisUtil.set("key", "value");
+    }
 }

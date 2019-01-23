@@ -2,6 +2,7 @@ package com.example.demo.shiro;
 
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.impl.UserServiceImpl;
+import com.example.demo.utilty.RedisUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -11,13 +12,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class CustomRealm extends AuthorizingRealm {
 
@@ -25,8 +24,9 @@ public class CustomRealm extends AuthorizingRealm {
 
     @Autowired
     private UserServiceImpl userService;
+
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisUtil redisUtil;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
@@ -61,17 +61,37 @@ public class CustomRealm extends AuthorizingRealm {
         UserEntity user = (UserEntity) principalCollection.getPrimaryPrincipal();
         Long id = user.getId();
 
-        //创建封装权限操作符的集合
+        //创建封装用户角色和权限操作符的集合
+        List<String> rolesList;
+        Set<String> rolesSet = new HashSet<>();
         List<String> permsList;
         Set<String> permsSet = new HashSet<>();
 
         logger.info("==================开始获取权限操作符===================");
-        // 获取redis中的缓存的权限操作符
-        String redisPerms = (String) redisTemplate.opsForValue().get("shiro_perms_" + id);
+        // 获取redis中的缓存的用户角色和权限操作符
+        Set<Object> redisRolesSet = redisUtil.sGet("shiro_roles_" + id);
+        String redisPerms = (String) redisUtil.get("shiro_perms_" + id);
 
+        //如果缓存中没有角色集合，则从数据库中获取；如果有，则返回redis中的集合
+        if (redisRolesSet == null || redisRolesSet.size() == 0) {
+            rolesList = userService.queryAllRoles(id);
+            //将role集合存入redis，并设置过期时间
+            redisUtil.sSet("shiro_roles_ " + id, rolesList);
+            redisUtil.expire("shiro_roles_" + id, 3600 * 6);
+            for (String roles : rolesList)
+                rolesSet.add(roles);
+
+        } else {
+            for (Object roles : redisRolesSet)
+                rolesSet.add((String) roles);
+        }
+
+        /**
+         * redis中没有权限操作符则从数据库中取出放入redis
+         * 将所有权限操作符的进行拼接成String放入redis
+         * redis中有缓存则将其取出放入set集合
+         */
         if (StringUtils.isBlank(redisPerms)) {
-            //redis中没有权限操作符则从数据库中取出放入redis
-            //将所有权限操作符的进行拼接成String放入redis
             redisPerms = "";
             permsList = userService.queryAllPerms(id);
             for (String perms : permsList) {
@@ -84,10 +104,10 @@ public class CustomRealm extends AuthorizingRealm {
                     permsSet.add(daoPerms);
                 }
             }
-            redisTemplate.opsForValue().set("shiro_perms_" + id, redisPerms.equals("") ? redisPerms : redisPerms.substring(1));
-            redisTemplate.expire("shiro_perms_" + id, 3600 * 6, TimeUnit.SECONDS);
+            ////将perms集合存入redis，并设置过期时间
+            redisUtil.set("shiro_perms_" + id, redisPerms.equals("") ? redisPerms : redisPerms.substring(1));
+            redisUtil.expire("shiro_perms_" + id, 3600 * 6);
         } else {
-            //redis中有缓存则将其取出放入set集合
             permsSet.addAll(Arrays.asList(redisPerms.trim().split(",")));
         }
 
@@ -95,6 +115,7 @@ public class CustomRealm extends AuthorizingRealm {
         //将set集合放入SimpleAuthorizationInfo中
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addStringPermissions(permsSet);
+        info.addRoles(rolesSet);
         return info;
     }
 }

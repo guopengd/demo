@@ -50,24 +50,6 @@ public class DefaultViewConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:81", "http://localhost:8080")
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
                 .exposedHeaders("Token")
-                .allowCredentials(false).maxAge(3600);
-    }
-
-    private CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        List<String> list = new ArrayList<>();
-        list.add("*");
-        corsConfiguration.setAllowedOrigins(list);
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        return corsConfiguration;
-    }
-
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", buildConfig());
-        return new CorsFilter(source);
+                .allowCredentials(true).maxAge(3600); //设置是否允许跨域传cookie
     }
 }

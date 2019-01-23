@@ -5,6 +5,7 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
 import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.token.JwtToken;
+import com.example.demo.utilty.RedisUtil;
 import com.example.demo.utilty.Res;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -23,40 +24,29 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-public class HelloController extends BaseController {
+public class LoginController extends BaseController {
 
     @Autowired
     UserService userService;
     @Autowired
-    RedisTemplate redisTemplate;
-
-    //直接网页访问地址http://localhost/hello
-    @SysLog("hello")
-    @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    @RequiresPermissions("sys:hello")
-    public Res hello() {
-        List<UserEntity> list = userService.queryList(null);
-        return Res.ok().put("list", list);
-    }
+    RedisUtil redisUtil;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Map login(@RequestBody UserEntity user) {
         Map<String, String> hashMap = new HashMap<>();
-        String userName = user.getUserName();
-        String password = user.getPassword();
         try {
-            //验证账号密码
-            Subject subject = ShiroUtils.getSubject();
+            String userName = user.getUserName();
+            String password = user.getPassword();
             // sha256加密
             password = new Sha256Hash(password).toHex();
+            //验证账号密码
+            Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken loginToken = new UsernamePasswordToken(userName, password);
             subject.login(loginToken);
-            //获取登录用户主体
-            UserEntity shiroUser = (UserEntity) subject.getPrincipal();
             //生成token返回前端
             String token = JwtToken.createToken(new HashMap<>());
-            redisTemplate.opsForValue().set("token", token);
-            redisTemplate.expire("token", 3600 * 6, TimeUnit.SECONDS);
+            redisUtil.set("token_" + getUserId(), token);
+            redisUtil.expire("token_" + getUserId(), 3600 * 6);
             hashMap.put("token", token);
         } catch (UnknownAccountException e) {
             return Res.error(e.getMessage());
@@ -74,8 +64,7 @@ public class HelloController extends BaseController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Map logOut() {
-        redisTemplate.delete("token");
-        redisTemplate.delete("shiro_perms_" + getUserId());
+        redisUtil.del("token_" + getUserId(), "shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
         ShiroUtils.logout();
         return Res.ok();
     }
