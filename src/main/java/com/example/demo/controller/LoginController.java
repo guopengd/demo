@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class LoginController extends BaseController {
     @Autowired
     RedisUtil redisUtil;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "sys/login", method = RequestMethod.POST)
     public Map login(@RequestBody UserEntity user) {
         Map<String, String> hashMap = new HashMap<>();
         try {
@@ -39,7 +40,9 @@ public class LoginController extends BaseController {
             UsernamePasswordToken loginToken = new UsernamePasswordToken(userName, password);
             subject.login(loginToken);
             //生成token返回前端
-            String token = JwtToken.createToken(new HashMap<>());
+            HashMap<String, Object> payload = new HashMap<>();
+            payload.put("userId", getUserId());
+            String token = JwtToken.createToken(payload);
             hashMap.put("token", token);
         } catch (UnknownAccountException e) {
             return Res.error(e.getMessage());
@@ -55,10 +58,21 @@ public class LoginController extends BaseController {
         return hashMap;
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public Map logOut() {
-        redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
-        ShiroUtils.logout();
+    @RequestMapping(value = "sys/logout", method = RequestMethod.POST)
+    public Map logOut(HttpServletRequest request) {
+        // shiro根据sessionId来存储subject，如果服务器重启用户没退出则会触发空指针异常
+        //
+        try {
+            redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
+            ShiroUtils.logout();
+        } catch (NullPointerException e) {
+            logger.error("============好吧，我服务器重启了但是你没退出，我获取不到你的subject了==========");
+            logger.error("============没办法了，我只能从token里面获取你的id来删除redis缓存了^_^==========");
+            HashMap<String, Object> resultMap = (HashMap<String, Object>) request.getAttribute("data");
+            String userId = (String) resultMap.get("UserId");
+            redisUtil.del("shiro_perms_" + userId, "shiro_roles_" + userId);
+        }
+
         return Res.ok();
     }
 }

@@ -126,12 +126,6 @@
             <artifactId>java-jwt</artifactId>
             <version>${java-jwt-version}</version>
         </dependency>
-        <!-- 实现url重写功能 -->
-        <dependency>
-            <groupId>org.tuckey</groupId>
-            <artifactId>urlrewritefilter</artifactId>
-            <version>${urlrewritefilter-version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>

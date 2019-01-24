@@ -16,7 +16,7 @@ public class MybatisConfig {
 
     @Autowired
     private DataSourceProperties dataSourceProperties;
-    
+
     @Bean(name = "dataSource")
     public DataSource dataSource() {
 

@@ -1,20 +1,19 @@
 package com.example.demo.common;
 
 import com.example.demo.handle.TokenHandle;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class DefaultViewConfig implements WebMvcConfigurer {
@@ -23,6 +22,24 @@ public class DefaultViewConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    /**
+     * 为了响应ivew-admin的history模式，使url如显示为正常url而非hash模式
+     * 再此将401,404,500错误页面跳转回index.html，并在admin中设置错误页面
+     * 在springboot2.0之前用mbeddedServletContainerCustomizer类来实现该功能。
+     * 在Spring Boot2.0以上配置嵌入式Servlet容器时EmbeddedServletContainerCustomizer类不存在
+     * 被WebServerFactoryCustomizer替代
+     */
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
+        return (container -> {
+            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/index.html");
+            ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/index.html");
+            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/index.html");
+
+            container.addErrorPages(error401Page, error404Page, error500Page);
+        });
     }
 
     /**
@@ -40,10 +57,10 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         // 多个拦截器组成一个拦截器链; addPathPatterns 用于添加拦截规则; excludePathPatterns 用户排除拦截
         registry.addInterceptor(getTokenHandle())
                 .addPathPatterns("/**")
-                .excludePathPatterns(Arrays.asList("/", "/index.html", "/login", "/logout", "/view/**", "/error/**", "/image/**"));
+                .excludePathPatterns(Arrays.asList("/", "/index.html", "/sys/login", "/sys/logout", "/view/**"));
     }
 
-    //配置跨域，以便前端使用vue开发
+    //配置跨域，以便前端使用admin开发
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

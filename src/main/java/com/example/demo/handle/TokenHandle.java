@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.token.JwtToken;
 import com.example.demo.token.TokenState;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,6 +32,12 @@ public class TokenHandle implements HandlerInterceptor {
 
         if (token == null) token = request.getHeader("Token");
 
+        // 未登录时无token，跳转回登录页面
+        if (StringUtils.isBlank(token)) {
+            request.getRequestDispatcher("/index.html").forward(request, response);
+            return false;
+        }
+
         // token验证
         Map<String, Object> resultMap = JwtToken.validToken(token);
         TokenState state = TokenState.getTokenState((String) resultMap.get("state"));
@@ -48,7 +55,7 @@ public class TokenHandle implements HandlerInterceptor {
                 outputMSg.put("code", 401);
                 outputMSg.put("msg", "您的token不合法或者过期了，请重新登陆");
                 //设置状态码
-                //response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 output(outputMSg.toJSONString(), response);
                 return false;
         }
