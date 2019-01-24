@@ -59,11 +59,5 @@ public class LogServiceImpl implements LogService {
         sysLogDao.saveBatch(sysLogs);
         return 1;
     }
-
-    @Override
-    public void deleteSysLog(Integer days) {
-        sysLogDao.deleteSysLog(days);
-    }
-
 }
 

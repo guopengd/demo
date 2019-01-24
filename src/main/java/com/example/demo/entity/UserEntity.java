@@ -8,11 +8,17 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    // 账户名称
     private String userName;
+    // 账户密码
     private String password;
+    // 账户状态
     private Integer status;
+    // 账户Email
     private String email;
+    // 账户手机号
     private String phone;
+    // 账户创建时间
     private Date createDate;
 
     public Long getId() {

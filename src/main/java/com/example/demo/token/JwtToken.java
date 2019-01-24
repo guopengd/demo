@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author running@vip.163.com
+ * JWT工具类
  */
 public class JwtToken {
 
@@ -52,7 +52,7 @@ public class JwtToken {
      */
     public static String createToken(Map<String, Object> payload) {
         String tokenString = null;
-        //添加过期时间
+        // 添加过期时间
         Long now = System.currentTimeMillis();
         payload.put("iat", now);
         payload.put("ext", now + INTERVAL * 1000 * 60 * 60 * 24);
@@ -106,7 +106,7 @@ public class JwtToken {
             }
 
         } catch (Exception e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
             // token格式不合法导致的异常
             resultMap.clear();
             resultMap.put("state", TokenState.INVALID.toString());

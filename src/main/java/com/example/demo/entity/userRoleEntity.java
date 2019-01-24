@@ -7,7 +7,9 @@ public class userRoleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    // 账户Id
     private Long userId;
+    // 账户角色名称
     private String roleName;
 
 

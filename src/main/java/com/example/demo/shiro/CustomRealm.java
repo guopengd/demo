@@ -57,11 +57,11 @@ public class CustomRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
         logger.info("==================开始权限验证===================");
-        //获取权限主体id
+        // 获取权限主体id
         UserEntity user = (UserEntity) principalCollection.getPrimaryPrincipal();
         Long id = user.getId();
 
-        //创建封装用户角色和权限操作符的集合
+        // 创建封装用户角色和权限操作符的集合
         List<String> rolesList;
         Set<String> rolesSet = new HashSet<>();
         List<String> permsList;
@@ -72,10 +72,10 @@ public class CustomRealm extends AuthorizingRealm {
         Set<Object> redisRolesSet = redisUtil.sGet("shiro_roles_" + id);
         String redisPerms = (String) redisUtil.get("shiro_perms_" + id);
 
-        //如果缓存中没有角色集合，则从数据库中获取；如果有，则返回redis中的集合
+        // 如果缓存中没有角色集合，则从数据库中获取；如果有，则返回redis中的集合
         if (redisRolesSet == null || redisRolesSet.size() == 0) {
             rolesList = userService.queryAllRoles(id);
-            //将role集合存入redis，并设置过期时间
+            // 将role集合存入redis，并设置过期时间
             redisUtil.sSet("shiro_roles_ " + id, rolesList);
             redisUtil.expire("shiro_roles_" + id, 3600 * 6);
             for (String roles : rolesList)
@@ -104,7 +104,7 @@ public class CustomRealm extends AuthorizingRealm {
                     permsSet.add(daoPerms);
                 }
             }
-            ////将perms集合存入redis，并设置过期时间
+            // 将perms集合存入redis，并设置过期时间
             redisUtil.set("shiro_perms_" + id, redisPerms.equals("") ? redisPerms : redisPerms.substring(1));
             redisUtil.expire("shiro_perms_" + id, 3600 * 6);
         } else {
@@ -112,7 +112,7 @@ public class CustomRealm extends AuthorizingRealm {
         }
 
         logger.info("==================获取权限操作符成功===================");
-        //将set集合放入SimpleAuthorizationInfo中
+        // 将set集合放入SimpleAuthorizationInfo中
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addStringPermissions(permsSet);
         info.addRoles(rolesSet);

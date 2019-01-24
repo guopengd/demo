@@ -24,7 +24,7 @@ public class RedisConfig {
     /**
      * 配置自定义redisTemplate
      *
-     * @return
+     * @return template
      */
     @Bean
     static RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

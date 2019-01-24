@@ -10,70 +10,27 @@ import java.util.Map;
  */
 public interface LogService {
 
-    /**
-     * 查询日志
-     *
-     * @param id
-     * @return
-     */
+    // 查询日志
     LogEntity queryObject(Long id);
 
-    /**
-     * 查询日志信息列表
-     *
-     * @param map
-     * @return
-     */
+    // 查询日志信息列表
     List<LogEntity> queryList(Map<String, Object> map);
 
-    /**
-     * 批量保存日志
-     *
-     * @param sysLogs
-     * @return
-     */
+    // 批量保存日志
     int saveBatch(List<LogEntity> sysLogs);
 
-    /**
-     * 查询日志信息总数
-     *
-     * @param map
-     * @return
-     */
+    // 查询日志信息总数
     int queryTotal(Map<String, Object> map);
 
-    /**
-     * 保存日志信息
-     *
-     * @param sysLog
-     */
+    // 保存日志信息
     void save(LogEntity sysLog);
 
-    /**
-     * 更新日志信息
-     *
-     * @param sysLog
-     */
+    // 更新日志信息
     void update(LogEntity sysLog);
 
-    /**
-     * 删除日志信息
-     *
-     * @param id
-     */
+    // 删除日志信息
     void delete(Long id);
 
-    /**
-     * 批量删除日志信息
-     *
-     * @param ids
-     */
+    // 批量删除日志信息
     void deleteBatch(Long[] ids);
-
-    /**
-     * 定期删除消息
-     *
-     * @param days 保留的月份数
-     */
-    void deleteSysLog(Integer days);
 }

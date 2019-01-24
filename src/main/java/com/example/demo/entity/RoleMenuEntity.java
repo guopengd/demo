@@ -7,7 +7,9 @@ public class RoleMenuEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    // 角色名称
     private String roleName;
+    //拥有菜单Id
     private Long menuId;
 
     public Long getId() {

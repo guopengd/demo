@@ -69,9 +69,9 @@ public class ShiroConfig {
          chain.addPathDefinition("/admin", "authc,roles[admin]");//需要js角色
          */
         /**
-         使用接口的自定义配置(这里配置所有请求路径都可以匿名访问,需要在对应的接口使用@RequiresPermissions("")进行访问控制)
-         因本人iview-admin不太熟悉，所有页面都在同一个index页面进行锚链接，因此不知道如何配置shiro的访问权限
-         因此本demo前端页面跳转依靠token控制，权限则交给shiro实现
+         * 使用接口的自定义配置(这里配置所有请求路径都可以匿名访问,需要在对应的接口使用@RequiresPermissions("")进行访问控制)
+         * 因本人iview-admin不太熟悉，所有页面都在同一个index页面进行锚链接，因此不知道如何配置shiro的访问权限
+         * 因此本demo前端页面跳转依靠token控制，权限则交给shiro实现
          */
         chainDefinition.addPathDefinition("/**", "anon");
         return chainDefinition;
@@ -108,10 +108,10 @@ public class ShiroConfig {
         //用户访问未对其授权的资源时,所显示的连接
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         /**
-         定义shiro过滤链 Map结构 * Map中key(xml中是指value值)的第一个'/'代表的路径是相对于HttpServletRequest.
-         getContextPath()的值来的 * anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,
-         比方说login.jsp?main这种 * authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器
-         org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+         * 定义shiro过滤链 Map结构
+         * Map中key(xml中是指value值)的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的
+         * anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种
+         * authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
          */
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了

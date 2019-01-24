@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * 登录用户实现类
+ */
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
 

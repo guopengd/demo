@@ -195,14 +195,4 @@ public class TokenUtil {
             }
         }
     }
-
-
-    public static void main(String[] args) {
-        System.out.println(generateToken("s", 1));
-        System.out.println(generateToken("q", 1));
-        System.out.println(generateToken("s3", 2));
-        System.out.println(generateToken("s4", 3));
-        System.out.println(removeToken(3));
-        System.out.println(getTokenMap());
-    }
 }
