@@ -4,11 +4,14 @@ package com.example.demo.common;
 import com.example.demo.shiro.CustomRealm;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -35,14 +38,19 @@ public class ShiroConfig {
         return new CustomRealm();
     }
 
-
+    /**
+     * shiro缓存管理器;
+     * 需要注入对应的其它的实体类中
+     * 安全管理器：securityManager
+     * 可见securityManager是整个shiro的核心
+     */
     @Bean
-    public CacheManager getCacheManager() {
-        return new MemoryConstrainedCacheManager();
+    public EhCacheManager getCacheManager() {
+        return new EhCacheManager();
     }
 
     /**
-     * 不指定名字的话，自动创建一个方法名第一个字母小写的bean * @Bean(name = "securityManager") * @return
+     * shiro的核心配置，shiro的方法都是通过SecurityManager来实现的
      */
     @Bean
     public SecurityManager securityManager(CustomRealm customRealm) {
@@ -50,8 +58,30 @@ public class ShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(customRealm);
         //注入缓存管理器;
-        securityManager.setCacheManager(getCacheManager());//这个如果执行多次，也是同样的一个对象;详情请看RedisConfig
+        securityManager.setCacheManager(getCacheManager());//这个如果执行多次，也是同样的一个对象;详情请看getTokenHandle
         return securityManager;
+    }
+
+    /**
+     * 下列两个bean用于解决一个奇怪的bug。在引入spring aop的情况下。
+     * 在@Controller注解的类的方法中加入@RequiresRole等shiro注解，会导致该方法无法映射请求，导致返回404。
+     * 加入以下两个配置可以解决此问题
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
+    }
+
+    /**
+     * 开启aop注解支持
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 
     /**
@@ -78,21 +108,10 @@ public class ShiroConfig {
     }
 
     /**
-     * setUsePrefix(false)用于解决一个奇怪的bug。在引入spring aop的情况下。
-     * 在@Controller注解的类的方法中加入@RequiresRole等shiro注解，会导致该方法无法映射请求，导致返回404。
-     * 加入这项配置能解决这个bug
-     */
-    @Bean
-    public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
-        return defaultAdvisorAutoProxyCreator;
-    }
-
-    /**
      * Shiro的Web过滤器Factory 命名:shiroFilter
      *
-     * @param securityManager * @return
+     * @param securityManager
+     * @return
      */
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
@@ -101,12 +120,12 @@ public class ShiroConfig {
         //Shiro的核心安全接口,这个属性是必须的
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
-        //要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面
+        //要求登录时的链接(可根据项目的URL进行替换),非必须的属性
         shiroFilterFactoryBean.setLoginUrl("/login");
         //登录成功后要跳转的连接,逻辑也可以自定义，例如返回上次请求的页面
         shiroFilterFactoryBean.setSuccessUrl("/index");
         //用户访问未对其授权的资源时,所显示的连接
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/404");
         /**
          * 定义shiro过滤链 Map结构
          * Map中key(xml中是指value值)的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的
@@ -120,5 +139,25 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
+    }
+
+    /**
+     * 给shiro的sessionId默认的JSSESSIONID名字改掉
+     */
+    @Bean(name = "sessionIdCookie")
+    public SimpleCookie getSessionIdCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie("webcookie");
+        /**
+         * HttpOnly标志的引入是为了防止设置了该标志的cookie被JavaScript读取，
+         * 但事实证明设置了这种cookie在某些浏览器中却能被JavaScript覆盖，
+         * 可被攻击者利用来发动session fixation攻击
+         */
+        simpleCookie.setHttpOnly(true);
+        /**
+         * 设置浏览器cookie过期时间，如果不设置默认为-1，表示关闭浏览器即过期
+         * cookie的单位为秒 比如60*60为1小时
+         */
+        simpleCookie.setMaxAge(3600 * 24);
+        return simpleCookie;
     }
 }

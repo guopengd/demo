@@ -76,8 +76,8 @@ public class CustomRealm extends AuthorizingRealm {
         if (redisRolesSet == null || redisRolesSet.size() == 0) {
             rolesList = userService.queryAllRoles(id);
             // 将role集合存入redis，并设置过期时间
-            redisUtil.sSet("shiro_roles_ " + id, rolesList);
-            redisUtil.expire("shiro_roles_" + id, 3600 * 6);
+            redisUtil.sSet("shiro_roles_" + id, rolesList);
+            redisUtil.expire("shiro_roles_" + id, 3600 * 24);
             for (String roles : rolesList)
                 rolesSet.add(roles);
 
@@ -106,7 +106,7 @@ public class CustomRealm extends AuthorizingRealm {
             }
             // 将perms集合存入redis，并设置过期时间
             redisUtil.set("shiro_perms_" + id, redisPerms.equals("") ? redisPerms : redisPerms.substring(1));
-            redisUtil.expire("shiro_perms_" + id, 3600 * 6);
+            redisUtil.expire("shiro_perms_" + id, 3600 * 24);
         } else {
             permsSet.addAll(Arrays.asList(redisPerms.trim().split(",")));
         }

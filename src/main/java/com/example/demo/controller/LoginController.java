@@ -63,6 +63,7 @@ public class LoginController extends BaseController {
         // shiro根据sessionId来存储subject，如果服务器重启用户没退出则会触发空指针异常
         //
         try {
+            logger.info("============开始执行退出登录操作==========");
             redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
             ShiroUtils.logout();
         } catch (NullPointerException e) {

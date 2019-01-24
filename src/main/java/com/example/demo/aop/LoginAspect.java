@@ -100,7 +100,7 @@ public class LoginAspect {
 
         // 用户名
         String username = ShiroUtils.getUserEntity().getUserName();
-
+        sysLog.setUsername(username);
         sysLog.setCreateDate(new Date());
         // 保存系统日志
         logService.save(sysLog);

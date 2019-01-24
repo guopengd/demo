@@ -27,8 +27,9 @@ public class TokenHandle implements HandlerInterceptor {
         //从cookie中获取Token，如果不存在则从header中获取
         String token = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies)
-            if (cookie.getName().equals("token")) token = cookie.getValue();
+        if (cookies != null)
+            for (Cookie cookie : cookies)
+                if (cookie.getName().equals("token")) token = cookie.getValue();
 
         if (token == null) token = request.getHeader("Token");
 

@@ -36,9 +36,9 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         return (container -> {
             ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/index.html");
             ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/index.html");
+            ErrorPage error405Page = new ErrorPage(HttpStatus.METHOD_NOT_ALLOWED, "/index.html");
             ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/index.html");
-
-            container.addErrorPages(error401Page, error404Page, error500Page);
+            container.addErrorPages(error401Page, error404Page, error405Page, error500Page);
         });
     }
 
@@ -57,7 +57,7 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         // 多个拦截器组成一个拦截器链; addPathPatterns 用于添加拦截规则; excludePathPatterns 用户排除拦截
         registry.addInterceptor(getTokenHandle())
                 .addPathPatterns("/**")
-                .excludePathPatterns(Arrays.asList("/", "/index.html", "/sys/login", "/sys/logout", "/view/**"));
+                .excludePathPatterns(Arrays.asList("/", "/index.html", "/sys/login", "/view/**"));
     }
 
     //配置跨域，以便前端使用admin开发

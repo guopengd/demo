@@ -23,8 +23,12 @@ public class RedisConfig {
 
     /**
      * 配置自定义redisTemplate
-     *
-     * @return template
+     * 说句实在话，redis我都没有用武之地，权限有缓存，不需要配置redis
+     * token设置了设置了有效期和secret，也没必要加入缓存中
+     * 把权限操作符和用户角色放入redis，是我最后的挣扎了
+     * 好歹怎么说，用户关闭浏览器不一定退出登录
+     * 下次登录还可以从缓存中高效取出它们
+     * 好吧，只是最后的挣扎
      */
     @Bean
     static RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
