@@ -1,6 +1,7 @@
 package com.example.demo.handle;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.token.JwtToken;
 import com.example.demo.token.TokenState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TokenHandle implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //从请求头中获取token
+        //从cookie中获取Token，如果不存在则从header中获取
         String token = null;
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
@@ -30,14 +31,10 @@ public class TokenHandle implements HandlerInterceptor {
 
         if (token == null) token = request.getHeader("Token");
 
+        // token验证
         Map<String, Object> resultMap = JwtToken.validToken(token);
-        TokenState state;
-        String redisToken = (String) redisTemplate.opsForValue().get("token");
-        if (token != null && redisToken != null && redisToken.equals(token)) {
-            state = TokenState.getTokenState((String) resultMap.get("state"));
-        } else {
-            state = TokenState.getTokenState(("INVALID"));
-        }
+        TokenState state = TokenState.getTokenState((String) resultMap.get("state"));
+
         switch (state) {
             case VALID:
                 //取出payload中数据,放入到request作用域中
@@ -46,7 +43,6 @@ public class TokenHandle implements HandlerInterceptor {
                 return true;
             case EXPIRED:
             case INVALID:
-                System.out.println("无效token");
                 //token过期或者无效，则输出错误信息返回给ajax
                 JSONObject outputMSg = new JSONObject();
                 outputMSg.put("code", 401);

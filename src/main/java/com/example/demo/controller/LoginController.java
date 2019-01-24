@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.annotation.SysLog;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.UserService;
 import com.example.demo.shiro.ShiroUtils;
@@ -8,20 +7,16 @@ import com.example.demo.token.JwtToken;
 import com.example.demo.utilty.RedisUtil;
 import com.example.demo.utilty.Res;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 public class LoginController extends BaseController {
@@ -45,8 +40,6 @@ public class LoginController extends BaseController {
             subject.login(loginToken);
             //生成token返回前端
             String token = JwtToken.createToken(new HashMap<>());
-            redisUtil.set("token_" + getUserId(), token);
-            redisUtil.expire("token_" + getUserId(), 3600 * 6);
             hashMap.put("token", token);
         } catch (UnknownAccountException e) {
             return Res.error(e.getMessage());
@@ -64,7 +57,7 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Map logOut() {
-        redisUtil.del("token_" + getUserId(), "shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
+        redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
         ShiroUtils.logout();
         return Res.ok();
     }

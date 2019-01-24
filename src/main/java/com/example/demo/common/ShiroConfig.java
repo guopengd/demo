@@ -71,8 +71,7 @@ public class ShiroConfig {
         /**
          使用接口的自定义配置(这里配置所有请求路径都可以匿名访问,需要在对应的接口使用@RequiresPermissions("")进行访问控制)
          因本人iview-admin不太熟悉，所有页面都在同一个index页面进行锚链接，因此不知道如何配置shiro的访问权限
-         所以本demo的登录拦截使用的token拦截，在需要权限的方法下使用@RequiresPermissions("")进行注解
-         这样即使既可以防止用户未登录操作，也能防止用户登录后直接url访问无访问权限的接口
+         因此本demo前端页面跳转依靠token控制，权限则交给shiro实现
          */
         chainDefinition.addPathDefinition("/**", "anon");
         return chainDefinition;

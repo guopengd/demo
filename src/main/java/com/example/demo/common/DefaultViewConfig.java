@@ -40,7 +40,7 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         // 多个拦截器组成一个拦截器链; addPathPatterns 用于添加拦截规则; excludePathPatterns 用户排除拦截
         registry.addInterceptor(getTokenHandle())
                 .addPathPatterns("/**")
-                .excludePathPatterns(Arrays.asList("/", "/index.html", "favicon.ico", "/login", "/logout", "/view/**", "/error/**", "/image/**"));
+                .excludePathPatterns(Arrays.asList("/", "/index.html", "/login", "/logout", "/view/**", "/error/**", "/image/**"));
     }
 
     //配置跨域，以便前端使用vue开发
