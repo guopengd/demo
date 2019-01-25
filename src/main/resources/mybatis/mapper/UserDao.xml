@@ -5,7 +5,7 @@
     <select id="queryObject" resultType="UserEntity">
         select
         `id` as `id`,
-        `username` as `username`,
+        `username` as `userName`,
         `password` as `password`,
         `status` as `status`,
         `email` as `email`,
@@ -17,19 +17,19 @@
     <select id="queryByName" resultType="UserEntity">
         select
         `id` as `id`,
-        `username` as `username`,
+        `username` as `userName`,
         `password` as `password`,
         `status` as `status`,
         `email` as `email`,
         `phone` as `phone`,
         `create_date` as `createDate`
-        from `sys_user` where `username` = #{username}
+        from `sys_user` where `userName` = #{userName}
     </select>
 
     <select id="queryList" resultType="UserEntity">
         select
         `id` as `id`,
-        `username` as `username`,
+        `username` as `userName`,
         `password` as `password`,
         `status` as `status`,
         `email` as `email`,
@@ -37,8 +37,8 @@
         `create_date` as `createDate`
         from `sys_user`
         <where>
-            <if test="username != null and username.trim() != ''">
-                AND username like concat('%',#{username},'%')
+            <if test="userName != null and userName.trim() != ''">
+                AND username like concat('%',#{userName},'%')
             </if>
             <if test="status != null and status.trim() != ''">
                 AND status like concat('%',#{status},'%')
@@ -66,11 +66,11 @@
     <select id="queryTotal" resultType="int">
         select count(*) from `sys_user`
         <where>
-            <if test="username != null and username.trim() != ''">
-                AND username like concat('%',#{username},'%')
+            <if test="userName != null and userName.trim() != ''">
+                AND username like concat('%',#{userName},'%')
             </if>
             <if test="status != null and status.trim() != ''">
-                AND status like concat('%',#{operation},'%')
+                AND status like concat('%',#{status},'%')
             </if>
             <if test="email != null and email.trim() != ''">
                 AND email like concat('%',#{email},'%')
@@ -93,7 +93,7 @@
         )
         values
         (
-        #{username},
+        #{userName},
         #{password},
         #{status},
         #{email},
@@ -105,7 +105,7 @@
     <update id="update" parameterType="UserEntity">
         update `sys_user`
         <set>
-            <if test="username != null">`username` = #{username},</if>
+            <if test="userName != null">`username` = #{userName},</if>
             <if test="password != null">`password` = #{password},</if>
             <if test="status != null">`status` = #{status},</if>
             <if test="email != null">`email` = #{email},</if>

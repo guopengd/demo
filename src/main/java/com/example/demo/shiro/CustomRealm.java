@@ -38,7 +38,6 @@ public class CustomRealm extends AuthorizingRealm {
         //从数据库中获取对应用户名的密码
         UserEntity user = userService.queryByName(userName);
         //验证账号是否正确
-        logger.info("==================开始账号验证===================");
         if (user == null) {
             throw new UnknownAccountException("账号不存在");
         }
@@ -49,7 +48,7 @@ public class CustomRealm extends AuthorizingRealm {
             throw new LockedAccountException("账号已被冻结");
         }
 
-        logger.info("==================账号验证完成===================");
+        logger.info("==================账号验证成功===================");
         return new SimpleAuthenticationInfo(user, password, "CustomRealm");
     }
 
@@ -83,7 +82,7 @@ public class CustomRealm extends AuthorizingRealm {
 
         } else {
             for (Object roles : redisRolesSet)
-                rolesSet.add((String) roles);
+                rolesSet.add(roles.toString());
         }
 
         /**

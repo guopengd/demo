@@ -6,6 +6,7 @@ import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.token.JwtToken;
 import com.example.demo.utilty.RedisUtil;
 import com.example.demo.utilty.Res;
+import net.minidev.json.JSONObject;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
@@ -67,10 +68,10 @@ public class LoginController extends BaseController {
             redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
             ShiroUtils.logout();
         } catch (NullPointerException e) {
-            logger.error("============好吧，我服务器重启了但是你没退出，我获取不到你的subject了==========");
-            logger.error("============没办法了，我只能从token里面获取你的id来删除redis缓存了^_^==========");
-            HashMap<String, Object> resultMap = (HashMap<String, Object>) request.getAttribute("data");
-            String userId = (String) resultMap.get("UserId");
+            logger.error("============我服务器重启了或者你关浏览器了，我获取不到你的subject了==========");
+            logger.error("============没办法了，我只能从token里面获取你的id来删除redis缓存了===========");
+            JSONObject data = (JSONObject) request.getAttribute("data");
+            Object userId = data.get("userId");
             redisUtil.del("shiro_perms_" + userId, "shiro_roles_" + userId);
         }
 

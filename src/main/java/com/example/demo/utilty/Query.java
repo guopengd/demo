@@ -21,13 +21,14 @@ public class Query extends LinkedHashMap<String, Object> {
         this.put("offset", (page - 1) * rows);
         this.put("page", page);
         this.put("rows", rows);
-        // 防止SQL注入
-        String sort = SqlFilterUtils.sqlInj(params.get("sort").toString());
-        String order = SqlFilterUtils.sqlInj(params.get("order").toString());
-        this.put("sort", sort);
-        this.put("order", order);
+        if (params.get("sort") != null && params.get("order") != null) {
+            // 防止SQL注入
+            String sort = SqlFilterUtils.sqlInj(params.get("sort").toString());
+            String order = SqlFilterUtils.sqlInj(params.get("order").toString());
+            this.put("sort", sort);
+            this.put("order", order);
+        }
     }
-
 
     public int getPage() {
         return page;

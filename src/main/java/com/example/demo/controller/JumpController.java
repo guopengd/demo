@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class JumpController extends BaseController {
@@ -19,6 +20,7 @@ public class JumpController extends BaseController {
     //直接网页访问地址http://localhost/hello
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     @RequiresPermissions("sys:hello")
+    @ResponseBody
     public Res hello() {
         UserEntity list = userService.queryObject(1l);
         return Res.ok().put("list", list);

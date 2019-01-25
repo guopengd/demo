@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["738b"],{"738b":function(e,t,r){"use strict";r.r(t),r.d(t,"getRouterReq",function(){return u});var n=r("66df"),u=function(e){return n["default"].request({url:"get_router",params:{access:e},method:"get"})}}}]);

@@ -1,12 +1,9 @@
 package com.example.demo.handle;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.token.JwtToken;
 import com.example.demo.token.TokenState;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,9 +15,6 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public class TokenHandle implements HandlerInterceptor {
-
-    @Autowired
-    RedisTemplate redisTemplate;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -56,7 +50,7 @@ public class TokenHandle implements HandlerInterceptor {
                 outputMSg.put("code", 401);
                 outputMSg.put("msg", "您的token不合法或者过期了，请重新登陆");
                 //设置状态码
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 output(outputMSg.toJSONString(), response);
                 return false;
         }
