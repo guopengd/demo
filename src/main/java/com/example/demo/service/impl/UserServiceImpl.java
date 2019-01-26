@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> queryList(Map<String, Object> map) {
+
         return userDao.queryList(map);
     }
 

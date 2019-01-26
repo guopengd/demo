@@ -8,6 +8,8 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    // 角色id
+    private Long roleId;
     // 账户名称
     private String userName;
     // 账户密码
@@ -20,6 +22,8 @@ public class UserEntity implements Serializable {
     private String phone;
     // 账户创建时间
     private Date createDate;
+    // 角色名称
+    private String roleName;
 
     public Long getId() {
         return id;
@@ -27,6 +31,14 @@ public class UserEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getUserName() {
@@ -77,16 +89,26 @@ public class UserEntity implements Serializable {
         this.createDate = createDate;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
                 "id=" + id +
+                ", roleId=" + roleId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", status=" + status +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", createDate=" + createDate +
+                ", roleName='" + roleName + '\'' +
                 '}';
     }
 }

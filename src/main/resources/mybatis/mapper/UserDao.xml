@@ -5,6 +5,7 @@
     <select id="queryObject" resultType="UserEntity">
         select
         `id` as `id`,
+        `role_id` as `roleId`,
         `username` as `userName`,
         `password` as `password`,
         `status` as `status`,
@@ -17,6 +18,7 @@
     <select id="queryByName" resultType="UserEntity">
         select
         `id` as `id`,
+        `role_id` as `roleId`,
         `username` as `userName`,
         `password` as `password`,
         `status` as `status`,
@@ -28,26 +30,29 @@
 
     <select id="queryList" resultType="UserEntity">
         select
-        `id` as `id`,
-        `username` as `userName`,
-        `password` as `password`,
-        `status` as `status`,
-        `email` as `email`,
-        `phone` as `phone`,
-        `create_date` as `createDate`
-        from `sys_user`
+        u.`id` as `id`,
+        u.`role_id` as `roleId`,
+        u.`username` as `userName`,
+        u.`password` as `password`,
+        u.`status` as `status`,
+        u.`email` as `email`,
+        u.`phone` as `phone`,
+        u.`create_date` as `createDate`,
+        ur.`role_name` as `roleName`
+        from `sys_user` u
+        LEFT JOIN `user_role` ur on u.`role_id` = ur.`id`
         <where>
             <if test="userName != null and userName.trim() != ''">
-                AND username like concat('%',#{userName},'%')
+                AND `username` like concat('%',#{userName},'%')
             </if>
-            <if test="status != null and status.trim() != ''">
-                AND status like concat('%',#{status},'%')
+            <if test="status != null">
+                AND `status` like concat('%',#{status},'%')
             </if>
             <if test="email != null and email.trim() != ''">
-                AND email like concat('%',#{email},'%')
+                AND `email` like concat('%',#{email},'%')
             </if>
             <if test="phone != null and phone.trim() != ''">
-                AND phone like concat('%',#{phone},'%')
+                AND `phone` like concat('%',#{phone},'%')
             </if>
         </where>
         <choose>
@@ -67,16 +72,16 @@
         select count(*) from `sys_user`
         <where>
             <if test="userName != null and userName.trim() != ''">
-                AND username like concat('%',#{userName},'%')
+                AND `username` like concat('%',#{userName},'%')
             </if>
-            <if test="status != null and status.trim() != ''">
-                AND status like concat('%',#{status},'%')
+            <if test="status != null">
+                AND `status` like concat('%',#{status},'%')
             </if>
             <if test="email != null and email.trim() != ''">
-                AND email like concat('%',#{email},'%')
+                AND `email` like concat('%',#{email},'%')
             </if>
             <if test="phone != null and phone.trim() != ''">
-                AND phone like concat('%',#{phone},'%')
+                AND `phone` like concat('%',#{phone},'%')
             </if>
         </where>
     </select>
@@ -84,6 +89,7 @@
     <insert id="save" parameterType="UserEntity" useGeneratedKeys="true" keyProperty="id">
         insert into `sys_user`
         (
+        `role_id`,
         `username`,
         `password`,
         `status`,
@@ -93,6 +99,7 @@
         )
         values
         (
+        #{roleId},
         #{userName},
         #{password},
         #{status},
@@ -105,6 +112,7 @@
     <update id="update" parameterType="UserEntity">
         update `sys_user`
         <set>
+            <if test="roleId != null">`role_id` = #{roleId},</if>
             <if test="userName != null">`username` = #{userName},</if>
             <if test="password != null">`password` = #{password},</if>
             <if test="status != null">`status` = #{status},</if>
@@ -122,26 +130,27 @@
     <select id="queryAllRoles" resultType="string">
 		select ur.`role_name` from
 		`sys_user` u
-		LEFT JOIN `user_role` ur on u.`id` = ur.`user_id`
+		LEFT JOIN `user_role` ur on u.`role_id` = ur.`id`
 		where u.`id` = #{userId}
 	</select>
 
     <!-- 查询用户的所有菜单ID -->
     <select id="queryAllMenuId" resultType="long">
-		select distinct
-		rm.`menu_id` from `user_role` ur
-		LEFT JOIN `role_menu` rm on ur.`id` =
-		rm.`role_id`
-		where ur.`user_id` = #{userId}
+		select rm.`menu_id` from
+		`sys_user` u
+		LEFT JOIN `user_role` ur on u.`role_id` = ur.`id`
+		LEFT JOIN `role_menu` rm on ur.`id` = rm.`role_id`
+		where u.`id` = #{userId}
 	</select>
 
     <!-- 查询用户的所有权限 -->
     <select id="queryAllPerms" resultType="string">
-        select distinct
-        m.`perms` from `user_role` ur
-        LEFT JOIN `role_menu` rm on ur.`id` = rm.`role_id`
-        LEFT JOIN `menu` m on rm.`menu_id` = m.`id`
-        where ur.`user_id` = #{userId}
+		select distinct
+		 m.`perms` from `sys_user` u
+		LEFT JOIN `user_role` ur on u.`role_id` = ur.`id`
+		LEFT JOIN `role_menu` rm on ur.`id` = rm.`role_id`
+		 LEFT JOIN `menu` m on rm.`menu_id` = m.`id`
+		where u.`id` = #{userId}
     </select>
 
 </mapper>

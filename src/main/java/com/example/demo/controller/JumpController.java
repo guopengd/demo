@@ -26,7 +26,7 @@ public class JumpController extends BaseController {
         return Res.ok().put("list", list);
     }
 
-    @RequestMapping("/{home}.html")
+    @RequestMapping("/{home}")
     public String Router(@PathVariable("home") String home) {
         return home + ".html";
     }

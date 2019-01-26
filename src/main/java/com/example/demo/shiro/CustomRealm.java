@@ -49,7 +49,7 @@ public class CustomRealm extends AuthorizingRealm {
         }
 
         logger.info("==================账号验证成功===================");
-        return new SimpleAuthenticationInfo(user, password, "CustomRealm");
+        return new SimpleAuthenticationInfo(user, password, getName());
     }
 
     @Override
