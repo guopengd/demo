@@ -7,8 +7,8 @@ public class RoleMenuEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    // 角色名称
-    private String roleName;
+    // 角色id
+    private Long roleId;
     //拥有菜单Id
     private Long menuId;
 
@@ -20,13 +20,6 @@ public class RoleMenuEntity implements Serializable {
         this.id = id;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 
     public Long getMenuId() {
         return menuId;
@@ -36,11 +29,19 @@ public class RoleMenuEntity implements Serializable {
         this.menuId = menuId;
     }
 
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public String toString() {
         return "RoleMenuEntity{" +
                 "id=" + id +
-                ", roleName='" + roleName + '\'' +
+                ", roleName='" + roleId + '\'' +
                 ", menuId=" + menuId +
                 '}';
     }

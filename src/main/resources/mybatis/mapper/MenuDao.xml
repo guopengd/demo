@@ -3,4 +3,77 @@
 
 <mapper namespace="com.example.demo.dao.MenuDao">
 
+    <select id="queryList" resultType="MenuEntity">
+        select
+        `id` as `id`,
+        `parent_id` as `parentId`,
+        `path` as `path`,
+        `name` as `name`,
+        `title` as `title`,
+        `icon` as `icon`,
+        `order` as `order`,
+        `url` as `url`,
+        `perms` as `perms`
+        from `menu`
+        <where>
+            <if test="parent_id != null">
+                AND `parent_id` like concat('%',#{parentId},'%')
+            </if>
+            <if test="name != null and name.trim() != ''">
+                AND `title` like concat('%',#{title},'%')
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by `id` desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and rows != null">
+            limit #{offset}, #{rows}
+        </if>
+    </select>
+
+    <insert id="save" parameterType="MenuEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into `sys_user`
+        (
+        `parent_id`,
+        `path`,
+        `name`,
+        `title`,
+        `icon`,
+        `order`,
+        `url`,
+        `perms`
+        )
+        values
+        (
+        #{parentId},
+        #{path},
+        #{name},
+        #{title},
+        #{icon},
+        #{order},
+        #{url},
+        #{perms}
+        )
+    </insert>
+
+    <update id="update" parameterType="MenuEntity">
+        update `sys_user`
+        <set>
+            <if test="parentId != null">`parent_id` = #{parentId},</if>
+            <if test="path != null and phone.trim() != ''">`path` = #{path},</if>
+            <if test="name != null and phone.trim() != ''">`name` = #{name},</if>
+            <if test="title != null and phone.trim() != ''">`title` = #{title},</if>
+            <if test="icon != null and phone.trim() != ''">`icon` = #{icon},</if>
+            <if test="order != null and phone.trim() != ''">`phone` = #{order}</if>
+            <if test="url != null and phone.trim() != ''">`url` = #{url}</if>
+            <if test="perms != null and phone.trim() != ''">`perms` = #{perms}</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
 </mapper>

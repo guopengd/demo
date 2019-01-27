@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "sys")
-public class CustomerController {
+public class UserController {
 
     @Autowired
     UserService userService;
@@ -30,36 +30,15 @@ public class CustomerController {
     @RequestMapping(value = "customer/list", method = RequestMethod.POST)
     public Map<String, Object> list(@RequestBody Map<String, Object> params) {
 
-        if (params.get("userName") != null && params.get("userName").equals("")) {
-            params.put("userName", null);
-        }
-
-        if (params.get("password") != null && params.get("password").equals("")) {
-            params.put("password", null);
-        }
-
-        if (params.get("email") != null && params.get("email").equals("")) {
-            params.put("email", null);
-        }
-
-        if (params.get("phone") != null && params.get("phone").equals("")) {
-            params.put("phone", null);
-        }
-
         Query query = new Query(params);
         // 获取账号数据
         List<UserEntity> data = userService.queryList(query);
         // 获取分页数据
         int total = userService.queryTotal(query);
-        Map<String, Object> page = new HashMap();
-        page.put("page", query.get("page"));
-        page.put("rows", query.get("rows"));
-        page.put("total", total);
         // 获取所有用户角色
         List<UserRoleEntity> roles = roleService.queryList(new HashMap<>());
-        // 将数据返回
         Map<String, Object> res = new HashMap<>();
-        res.put("page", page);
+        res.put("total", total);
         res.put("rows", data);
         res.put("roles", roles);
         return res;
@@ -108,10 +87,6 @@ public class CustomerController {
 
         if (user.getId() == null) {
             throw new MyException("获取用户id失败");
-        }
-
-        if (user.getUserName() != null) {
-            user.setUserName(null);
         }
 
         if (user.getPassword() == null || user.getPassword().length() < 6) {

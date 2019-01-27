@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.RoleMenuEntity;
 import com.example.demo.entity.UserRoleEntity;
 
 import java.util.List;

@@ -24,7 +24,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     /**
-     * 定义要捕获的异常 可以多个 @ExceptionHandler({})
+     * 捕获权限不足异常
      *
      * @param request  request
      * @param e        exception
@@ -64,12 +64,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param response response
      * @return 响应结果
      */
-    @ExceptionHandler(RuntimeException.class)
+/*    @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity runtimeExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
         response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
         RuntimeException exception = (RuntimeException) e;
         return new ErrorResponseEntity(response.SC_INTERNAL_SERVER_ERROR, exception.getMessage());
-    }
+    }*/
 
     /**
      * 通用的接口映射异常处理方

@@ -14,24 +14,25 @@ public class PageUtils implements Serializable {
     // 列表数据
     private List<?> rows;
     // 分页数据
-    private Map<String, Object> page;
+    private Integer total;
 
     /**
      * 分页
-     * @param rows 列表数据
-     * @param page 分页数据
+     *
+     * @param rows  列表数据
+     * @param total 数据总数
      */
-    public PageUtils(List<?> rows, Map<String, Object> page) {
+    public PageUtils(List<?> rows, Integer total) {
         this.rows = rows;
-        this.page = page;
+        this.total = total;
     }
 
-    public Map<String, Object> getPage() {
-        return page;
+    public Integer getTotal() {
+        return total;
     }
 
-    public void setPage(Map<String, Object> page) {
-        this.page = page;
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     public List<?> getRows() {

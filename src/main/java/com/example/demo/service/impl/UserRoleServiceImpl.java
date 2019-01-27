@@ -1,11 +1,15 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dao.RoleMenuDao;
 import com.example.demo.dao.UserRoleDao;
+import com.example.demo.entity.RoleMenuEntity;
 import com.example.demo.entity.UserRoleEntity;
 import com.example.demo.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,36 +20,48 @@ import java.util.Map;
 public class UserRoleServiceImpl implements UserRoleService {
 
     @Autowired
-    UserRoleDao RoleDao;
+    UserRoleDao roleDao;
+    @Autowired
+    RoleMenuDao roleMenuDao;
 
     @Override
     public UserRoleEntity queryObject(Long id) {
-        return RoleDao.queryObject(id);
+        return roleDao.queryObject(id);
     }
 
     @Override
     public List<UserRoleEntity> queryList(Map<String, Object> map) {
-        return RoleDao.queryList(map);
+        return roleDao.queryList(map);
     }
 
     @Override
     public int queryTotal(Map<String, Object> map) {
-        return RoleDao.queryTotal(map);
+        return roleDao.queryTotal(map);
     }
 
     @Override
     public void save(UserRoleEntity user) {
-        RoleDao.save(user);
+        roleDao.save(user);
     }
 
     @Override
     public void update(UserRoleEntity user) {
-        RoleDao.update(user);
+        roleDao.update(user);
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
-        RoleDao.delete(id);
+        // 查询出当前角色与菜单的所有实体对象
+        List<RoleMenuEntity> roleMenus = roleMenuDao.queryList(id);
+        ArrayList<Long> roleId = new ArrayList<>();
+        // 遍历出角色所拥有的菜单id
+        for (RoleMenuEntity roleMenu : roleMenus) {
+            roleId.add(roleMenu.getRoleId());
+        }
+        if (!roleId.isEmpty())
+            roleMenuDao.deleteBatch(roleId.toArray());
+        roleDao.delete(id);
     }
 
 }

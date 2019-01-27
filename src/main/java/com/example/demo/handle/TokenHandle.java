@@ -29,7 +29,7 @@ public class TokenHandle implements HandlerInterceptor {
 
         // 未登录时无token，跳转回登录页面
         if (StringUtils.isBlank(token)) {
-            request.getRequestDispatcher("/index.html").forward(request, response);
+            request.getRequestDispatcher("/").forward(request, response);
             return false;
         }
 
@@ -50,7 +50,7 @@ public class TokenHandle implements HandlerInterceptor {
                 outputMSg.put("code", 401);
                 outputMSg.put("msg", "您的token不合法或者过期了，请重新登陆");
                 //设置状态码
-                // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
                 output(outputMSg.toJSONString(), response);
                 return false;
         }

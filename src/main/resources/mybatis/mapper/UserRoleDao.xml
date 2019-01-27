@@ -11,7 +11,7 @@
         from `user_role`
         <where>
             <if test="roleName != null and roleName.trim() != ''">
-                AND roleName like concat('%',#{roleName},'%')
+                AND `role_name` like concat('%',#{roleName},'%')
             </if>
             <if test="describe != null and describe.trim() != ''">
                 AND `describe` like concat('%',#{describe},'%')
@@ -44,7 +44,7 @@
         select count(*) from `user_role`
         <where>
             <if test="roleName != null and roleName.trim() != ''">
-                AND roleName like concat('%',#{roleName},'%')
+                AND `role_name` like concat('%',#{roleName},'%')
             </if>
             <if test="describe != null and describe.trim() != ''">
                 AND `describe` like concat('%',#{describe},'%')
@@ -52,7 +52,7 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="UserEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="UserRoleEntity" useGeneratedKeys="true" keyProperty="id">
         insert into `user_role`
         (
         `role_name`,
@@ -79,13 +79,5 @@
         </set>
         where `id` = #{id}
     </update>
-
-    <!-- 查询角色所拥有的菜单 -->
-    <select id="queryAllPerms" resultType="string">
-		select  m.`name`,m.`id`,m.`parent_id`
-		from `role_menu` ru
-		LEFT JOIN `menu` m on ru.`menu_id` = m.`id`
-		where ru.`role_id` = #{roleId}
-    </select>
 
 </mapper>

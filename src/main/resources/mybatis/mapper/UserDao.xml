@@ -113,11 +113,10 @@
         update `sys_user`
         <set>
             <if test="roleId != null">`role_id` = #{roleId},</if>
-            <if test="userName != null">`username` = #{userName},</if>
-            <if test="password != null">`password` = #{password},</if>
+            <if test="password != null and password.trim() != ''">`password` = #{password},</if>
             <if test="status != null">`status` = #{status},</if>
-            <if test="email != null">`email` = #{email},</if>
-            <if test="phone != null">`phone` = #{phone}</if>
+            <if test="email != null and email.trim() != ''">`email` = #{email},</if>
+            <if test="phone != null and phone.trim() != ''">`phone` = #{phone}</if>
         </set>
         where `id` = #{id}
     </update>

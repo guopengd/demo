@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 登录用户实现类
  */
-@Service(value = "userService")
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     @Autowired

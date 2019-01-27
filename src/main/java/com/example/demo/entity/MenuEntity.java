@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuEntity implements Serializable {
 
@@ -24,6 +26,8 @@ public class MenuEntity implements Serializable {
     private String url;
     // 菜单所需权限
     private String perms;
+    // 子菜单
+    private List<MenuEntity> children = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -97,6 +101,14 @@ public class MenuEntity implements Serializable {
         this.perms = perms;
     }
 
+    public List<MenuEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<MenuEntity> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
         return "MenuEntity{" +
@@ -109,6 +121,7 @@ public class MenuEntity implements Serializable {
                 ", order='" + order + '\'' +
                 ", url='" + url + '\'' +
                 ", perms='" + perms + '\'' +
+                ", children=" + children +
                 '}';
     }
 }
