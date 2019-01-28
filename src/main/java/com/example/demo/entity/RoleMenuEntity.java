@@ -41,7 +41,7 @@ public class RoleMenuEntity implements Serializable {
     public String toString() {
         return "RoleMenuEntity{" +
                 "id=" + id +
-                ", roleName='" + roleId + '\'' +
+                ", roleId='" + roleId + '\'' +
                 ", menuId=" + menuId +
                 '}';
     }

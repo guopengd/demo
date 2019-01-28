@@ -42,30 +42,31 @@ public class RoleMenuServiceImpl implements RoleMenuService {
         List<RoleMenuEntity> roleMenus = roleMenuDao.queryList(id);
         // temp 表示需要添加的菜单实体; roleId 表示角色所拥有的菜单id
         // save 表示需要批量添加的实体集合; delete 表示需要删除的id集合
-        RoleMenuEntity temp = new RoleMenuEntity();
         ArrayList<Long> roleId = new ArrayList<>();
         ArrayList<Long> delete = new ArrayList<>();
         List<RoleMenuEntity> save = new ArrayList<>();
         // 遍历出角色所拥有的菜单id
         for (RoleMenuEntity roleMenu : roleMenus) {
-            roleId.add(roleMenu.getRoleId());
+            roleId.add(roleMenu.getMenuId());
         }
-
         // 查询出用户需要删除的权限进行删除
-        for (Long i : roleId) {
-            if (!ids.contains(i)) {
-                delete.add(i);
+        for (int i = 0; i < roleId.size(); i++) {
+            if (!ids.contains(roleId.get(i))) {
+                delete.add(roleMenus.get(i).getId());
             }
         }
-        roleMenuDao.deleteBatch(delete.toArray());
+        if (!delete.isEmpty())
+            roleMenuDao.deleteBatch(delete.toArray());
         // 查询出角色需要新增的权限进行添加
         for (Long i : ids) {
             if (!roleId.contains(i)) {
+                RoleMenuEntity temp = new RoleMenuEntity();
                 temp.setRoleId(id);
                 temp.setMenuId(i);
                 save.add(temp);
             }
         }
-        roleMenuDao.saveBatch(save);
+        if (!save.isEmpty())
+            roleMenuDao.saveBatch(save);
     }
 }

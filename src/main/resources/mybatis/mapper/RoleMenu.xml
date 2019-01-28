@@ -3,14 +3,16 @@
 
 <mapper namespace="com.example.demo.dao.RoleMenuDao">
     <select id="queryList" resultType="RoleMenuEntity">
-		select  `id`,`role_id`,`menu_id`
+		select  `id` as `id`,
+		`role_id` as `roleId`,
+		`menu_id` as `menuId`
 		from `role_menu`
 		where `role_id` = #{roleId}
     </select>
-    
+
     <!-- 批量添加角色菜单id -->
     <insert id="saveBatch" parameterType="map" useGeneratedKeys="true">
-        insert into `sys_log`
+        insert into `role_menu`
         (
         `role_id`,
         `menu_id`
@@ -26,7 +28,7 @@
 
     <!-- 批量删除角色菜单id -->
     <delete id="deleteBatch">
-        delete from `sys_log` where `id` in
+        delete from `role_menu` where `id` in
         <foreach collection="array" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
