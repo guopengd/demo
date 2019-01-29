@@ -26,13 +26,11 @@ public class TokenHandle implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) token = cookie.getValue();
 
         if (token == null) token = request.getHeader("Token");
-
         // 未登录时无token，跳转回登录页面
         if (StringUtils.isBlank(token)) {
-            request.getRequestDispatcher("/").forward(request, response);
+            request.getRequestDispatcher("/index").forward(request, response);
             return false;
         }
-
         // token验证
         Map<String, Object> resultMap = JwtToken.validToken(token);
         TokenState state = TokenState.getTokenState((String) resultMap.get("state"));
@@ -47,7 +45,7 @@ public class TokenHandle implements HandlerInterceptor {
             case INVALID:
                 //token过期或者无效，则输出错误信息返回给ajax
                 JSONObject outputMSg = new JSONObject();
-                outputMSg.put("code", 401);
+                outputMSg.put("code", 415);
                 outputMSg.put("msg", "您的token不合法或者过期了，请重新登陆");
                 //设置状态码
                 response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);

@@ -12,6 +12,7 @@
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -29,6 +30,7 @@
         <java-jwt-version>3.1.0</java-jwt-version>
         <urlrewritefilter-version>4.0.4</urlrewritefilter-version>
         <shiro-spring-version>1.4.0</shiro-spring-version>
+        <shiro-ehcache-version>1.3.2</shiro-ehcache-version>
     </properties>
 
     <dependencies>
@@ -134,7 +136,7 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-ehcache</artifactId>
-            <version>1.3.2</version>
+            <version>${shiro-ehcache-version}</version>
         </dependency>
     </dependencies>
 

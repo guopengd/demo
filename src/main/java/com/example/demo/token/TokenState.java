@@ -2,8 +2,6 @@ package com.example.demo.token;
 
 /**
  * 枚举，定义token的三种状态
- *
- * @author running@vip.163.com
  */
 public enum TokenState {
     /**

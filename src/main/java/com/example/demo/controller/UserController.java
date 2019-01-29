@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.CreateUserEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.entity.UserRoleEntity;
 import com.example.demo.service.UserRoleService;
 import com.example.demo.service.UserService;
-import com.example.demo.utilty.MyException;
-import com.example.demo.utilty.Query;
-import com.example.demo.utilty.RegexUtil;
-import com.example.demo.utilty.Res;
+import com.example.demo.utilty.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,8 @@ public class UserController {
     UserService userService;
     @Autowired
     UserRoleService roleService;
+    @Autowired
+    RedisUtil redisUtil;
 
     @RequestMapping(value = "customer/list", method = RequestMethod.POST)
     public Map<String, Object> list(@RequestBody Map<String, Object> params) {
@@ -45,31 +45,43 @@ public class UserController {
     }
 
     @RequestMapping(value = "customer", method = RequestMethod.POST)
-    public Res save(@RequestBody UserEntity user) {
+    public Res save(@RequestBody CreateUserEntity user) {
 
         if (user.getUserName() == null || user.getUserName().length() < 6) {
             throw new MyException("用户名不能为空且不小于6个字符");
+        }
+
+        if (userService.queryByName(user.getUserName()) != null) {
+            throw new MyException("用户名已存在");
         }
 
         if (user.getPassword() == null || user.getPassword().length() < 6) {
             throw new MyException("密码不能为空且不小于6个字符");
         }
 
+        if (user.getCode() == null) {
+            throw new MyException("验证码不能为空");
+        }
+
+        String validCode = (String) redisUtil.get(user.getUuid());
+        if (user.getUuid() == null || validCode == null) {
+            throw new MyException("验证码已失效");
+        }
+        if (user.getUuid().equalsIgnoreCase(validCode)) {
+            throw new MyException("验证码错误");
+        }
         if (user.getStatus() == null) {
             user.setStatus(1);
         }
-
         if (RegexUtil.isNotNull(user.getEmail()) && !RegexUtil.isEmail(user.getEmail())) {
             throw new MyException("请输入正确的邮箱");
         }
-
         if (RegexUtil.isNotNull(user.getPhone()) && !RegexUtil.isPhone(user.getPhone())) {
             throw new MyException("请输入正确的电话号码");
         }
-
         user.setCreateDate(new Date());
         user.setPassword(new Sha256Hash(user.getPassword()).toHex());
-        userService.save(user);
+        userService.save(new UserEntity(user));
         return Res.ok("添加成功");
     }
 
@@ -88,23 +100,18 @@ public class UserController {
         if (user.getId() == null) {
             throw new MyException("获取用户id失败");
         }
-
         if (user.getPassword() == null || user.getPassword().length() < 6) {
             throw new MyException("密码不能为空且长度不低于6位数");
         }
-
         if (user.getStatus() == null) {
             user.setStatus(1);
         }
-
         if (!RegexUtil.isNull(user.getEmail()) && !RegexUtil.isEmail(user.getEmail())) {
             throw new MyException("请输入正确的邮箱");
         }
-
         if (!RegexUtil.isNull(user.getPhone()) && !RegexUtil.isPhone(user.getPhone())) {
             throw new MyException("请输入正确的电话号码");
         }
-
         // 防止未修改的密码再次被加密
         if (StringUtils.equals(userService.queryObject(user.getId()).getPassword(), user.getPassword())) {
             user.setPassword(null);

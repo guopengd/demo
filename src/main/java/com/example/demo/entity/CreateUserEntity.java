@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserEntity implements Serializable {
+public class CreateUserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,6 +24,10 @@ public class UserEntity implements Serializable {
     private Date createDate;
     // 角色名称
     private String roleName;
+    // 验证码
+    private String code;
+    // 验证码UUID
+    private String uuid;
 
     public Long getId() {
         return id;
@@ -97,9 +101,25 @@ public class UserEntity implements Serializable {
         this.roleName = roleName;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "CreateUserEntity{" +
                 "id=" + id +
                 ", roleId=" + roleId +
                 ", userName='" + userName + '\'' +
@@ -109,21 +129,8 @@ public class UserEntity implements Serializable {
                 ", phone='" + phone + '\'' +
                 ", createDate=" + createDate +
                 ", roleName='" + roleName + '\'' +
+                ", code='" + code + '\'' +
+                ", uuid='" + uuid + '\'' +
                 '}';
-    }
-
-    public UserEntity() {
-    }
-
-    public UserEntity(CreateUserEntity user) {
-        setPhone(user.getPhone());
-        setEmail(user.getEmail());
-        setStatus(user.getStatus());
-        setPassword(user.getPassword());
-        setUserName(user.getUserName());
-        setCreateDate(user.getCreateDate());
-        setId(user.getId());
-        setRoleId(user.getRoleId());
-        setRoleName(user.getRoleName());
     }
 }

@@ -55,7 +55,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * 捕获  RuntimeException 异常
-     * 如果不想在前端返回500错误，可将response的status设置为400，并在前端配置400错误页面
      * TODO  如果你觉得在一个 exceptionHandler 通过  if (e instanceof xxxException) 太麻烦
      * TODO  那么你还可以自己写多个不同的 exceptionHandler 处理不同异常
      *
