@@ -99,8 +99,12 @@ public class LoginAspect {
         sysLog.setIp(CusAccessObjectUtil.getIpAddress(request));
 
         // 用户名
-        String username = ShiroUtils.getUserEntity().getUserName();
-        sysLog.setUsername(username);
+        try {
+            String username = ShiroUtils.getUserEntity().getUserName();
+            sysLog.setUsername(username);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         sysLog.setCreateDate(new Date());
         // 保存系统日志
         logService.save(sysLog);

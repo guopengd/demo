@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 踩过的最大的坑，一开始粗心使用的com.example.demo.Dao，结果部署到服务器出错，查看错误日志报找不到userDao
  * 各种排查mapper文件和配置文件，各种调试无果，最后仔细一看Dao是大写，遂改成小写，部署成功
- * 问题存疑：为什么内部tomcat能扫描到com.example.demo.dao，部署到服务器的tomcat运行报错？
+ * 问题存疑：为什么内部tomcat能扫描到com.example.demo.Dao，部署到服务器的tomcat运行报错？
  */
 @MapperScan("com.example.demo.dao")
 public class DemoApplication extends SpringBootServletInitializer {

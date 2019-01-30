@@ -1,6 +1,7 @@
 package com.example.demo.handle;
 
 import com.example.demo.entity.ErrorResponseEntity;
+import com.example.demo.shiro.ShiroUtils;
 import com.example.demo.utilty.MyException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpHeaders;
@@ -33,9 +34,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(AuthorizationException.class)
     public ErrorResponseEntity AuthorizationExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
-        response.setStatus(response.SC_UNAUTHORIZED);
-        String message = "无访问权限";
-        return new ErrorResponseEntity(response.SC_UNAUTHORIZED, message);
+        StringBuilder message = new StringBuilder();
+        int status;
+        // 如果无法获取用户的subject，请用户先登录；
+        // 如果获取到用了的subject，则显示无权限
+        if (ShiroUtils.getUserEntity() == null) {
+            status = response.SC_UNAUTHORIZED;
+            message.append("敏感操作，请先登录");
+            response.setStatus(response.SC_UNAUTHORIZED);
+        } else {
+            status = response.SC_FORBIDDEN;
+            message.append("您无权限访问此页面");
+            response.setStatus(response.SC_FORBIDDEN);
+        }
+
+        return new ErrorResponseEntity(status, message.toString());
     }
 
     /**

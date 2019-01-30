@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.SysLog;
 import com.example.demo.entity.CreateUserEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.entity.UserRoleEntity;
@@ -7,6 +8,7 @@ import com.example.demo.service.UserRoleService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilty.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -69,6 +71,8 @@ public class UserController {
         }
         if (user.getUuid().equalsIgnoreCase(validCode)) {
             throw new MyException("验证码错误");
+        } else {
+            redisUtil.del(validCode);
         }
         if (user.getStatus() == null) {
             user.setStatus(1);
@@ -94,6 +98,7 @@ public class UserController {
         return Res.ok("删除成功");
     }
 
+    @RequiresPermissions("customer:update")
     @RequestMapping(value = "customer", method = RequestMethod.PUT)
     public Res update(@RequestBody UserEntity user) {
 

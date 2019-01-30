@@ -64,7 +64,7 @@ public class LoginController extends BaseController {
             subject.login(loginToken);
             //生成token返回前端
             HashMap<String, Object> payload = new HashMap<>();
-            new HashMap<>().put("userId", getUserId());
+            payload.put("userId", getUserId());
             String token = JwtToken.createToken(payload);
             resMap.put("token", token);
         } catch (UnknownAccountException e) {
@@ -81,19 +81,15 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "sys/logout", method = RequestMethod.POST)
     public Res logOut(HttpServletRequest request) {
-        // shiro根据sessionId来存储subject，如果服务器重启用户没退出则会触发空指针异常
-        try {
-            logger.info("============开始执行退出登录操作==========");
+        // shiro根据sessionId来存储subject，用户退出浏览器再次访问则subject不存在
+        if (ShiroUtils.getUserEntity() != null) {
             redisUtil.del("shiro_perms_" + getUserId(), "shiro_roles_" + getUserId());
             ShiroUtils.logout();
-        } catch (NullPointerException e) {
-            logger.error("============我服务器重启了或者你关浏览器了，我获取不到你的subject了==========");
-            logger.error("============没办法了，我只能从token里面获取你的id来删除redis缓存了===========");
+        } else {
             JSONObject data = (JSONObject) request.getAttribute("data");
             Object userId = data.get("userId");
             redisUtil.del("shiro_perms_" + userId, "shiro_roles_" + userId);
         }
-
         return Res.ok();
     }
 
@@ -113,4 +109,23 @@ public class LoginController extends BaseController {
         return map;
     }
 
+    // 用户重建会话时进行敏感操作需重新login
+    @RequestMapping(value = "sys/reLogin", method = RequestMethod.POST)
+    public Res reLogin(@RequestBody UserEntity user, HttpServletRequest request) {
+        if (user.getPassword() == null || user.getPassword().equals("")) {
+            throw new MyException("未输入密码");
+        }
+        JSONObject data = (JSONObject) request.getAttribute("data");
+        Long userId = Long.valueOf(data.get("userId").toString());
+        UserEntity validUser = userService.queryObject(userId);
+        String password = new Sha256Hash(user.getPassword()).toHex();
+        // 验证密码
+        if (!password.equals(validUser.getPassword())) {
+            throw new MyException("密码输入错误");
+        }
+        // 验证成功登录
+        UsernamePasswordToken loginToken = new UsernamePasswordToken(validUser.getUserName(), password);
+        ShiroUtils.getSubject().login(loginToken);
+        return Res.ok("验证成功");
+    }
 }
