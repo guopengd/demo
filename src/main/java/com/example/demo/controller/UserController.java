@@ -89,6 +89,8 @@ public class UserController {
         return Res.ok("添加成功");
     }
 
+    @SysLog("删除用户")
+    @RequiresPermissions("customer:delete")
     @RequestMapping(value = "customer/{id}", method = RequestMethod.DELETE)
     public Res delete(@PathVariable Long id) {
         if (id == null) {

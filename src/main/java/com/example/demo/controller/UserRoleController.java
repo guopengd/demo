@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.SysLog;
 import com.example.demo.entity.IdAndIdsEntity;
 import com.example.demo.entity.MenuEntity;
 import com.example.demo.entity.RoleMenuEntity;
@@ -80,6 +81,7 @@ public class UserRoleController extends BaseController {
         return Res.ok("修改成功");
     }
 
+    @SysLog("删除角色")
     @RequestMapping(value = "role/{id}", method = RequestMethod.DELETE)
     public Res deleteRole(@PathVariable Long id) {
 
@@ -112,6 +114,7 @@ public class UserRoleController extends BaseController {
         return data;
     }
 
+    @SysLog("修改角色菜单")
     @RequestMapping(value = "role/menu", method = RequestMethod.POST)
     public Res authorizationMenu(@RequestBody IdAndIdsEntity params) {
 

@@ -16,12 +16,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -123,7 +118,8 @@ public class LoginController extends BaseController {
         if (!password.equals(validUser.getPassword())) {
             throw new MyException("密码输入错误");
         }
-        // 验证成功登录
+
+        // 验证成功后登录
         UsernamePasswordToken loginToken = new UsernamePasswordToken(validUser.getUserName(), password);
         ShiroUtils.getSubject().login(loginToken);
         return Res.ok("验证成功");
