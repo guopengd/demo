@@ -16,13 +16,15 @@ public class Query extends LinkedHashMap<String, Object> {
     public Query(Map<String, Object> params) {
         this.putAll(params);
         // 分页参数
-        this.page = Integer.parseInt(params.get("page").toString());// 当前第几页
-        this.rows = Integer.parseInt(params.get("rows").toString());// 每页显示记录条数
-        this.put("offset", (page - 1) * rows);
-        this.put("page", page);
-        this.put("rows", rows);
+        if (params.get("page") != null && params.get("rows") != null) {
+            this.page = Integer.parseInt(params.get("page").toString());// 当前第几页
+            this.rows = Integer.parseInt(params.get("rows").toString());// 每页显示记录条数
+            this.put("offset", (page - 1) * rows);
+            this.put("page", page);
+            this.put("rows", rows);
+        }
+        // 防止SQL注入
         if (params.get("sort") != null && params.get("order") != null) {
-            // 防止SQL注入
             String sort = SqlFilterUtils.sqlInj(params.get("sort").toString());
             String order = SqlFilterUtils.sqlInj(params.get("order").toString());
             this.put("sort", sort);

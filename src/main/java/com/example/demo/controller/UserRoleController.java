@@ -22,11 +22,11 @@ import java.util.*;
 public class UserRoleController extends BaseController {
 
     @Autowired
-    UserRoleService roleService;
+    private UserRoleService roleService;
     @Autowired
-    MenuService menuService;
+    private MenuService menuService;
     @Autowired
-    RoleMenuService roleMenuService;
+    private RoleMenuService roleMenuService;
 
     @RequestMapping(value = "role/list", method = RequestMethod.POST)
     public PageUtils roleList(@RequestBody Map<String, Object> params) {

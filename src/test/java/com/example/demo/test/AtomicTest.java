@@ -3,22 +3,19 @@ package com.example.demo.test;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicTest {
-
     private static AtomicReference<AtomicTest> INSTANCE = new AtomicReference<>();
-
-    private AtomicTest() {
-    }
 
     public static AtomicTest getInstance() {
         for (; ; ) {
-            AtomicTest singleton = INSTANCE.get();
-            if (singleton != null) {
-                return singleton;
+            AtomicTest instance = INSTANCE.get();
+            if (instance != null) {
+                return instance;
             }
-            singleton = new AtomicTest();
-            if (INSTANCE.compareAndSet(null, singleton)) {
-                return singleton;
+            instance = new AtomicTest();
+            if (INSTANCE.compareAndSet(null, instance)) {
+                return instance;
             }
+
         }
     }
 
@@ -28,4 +25,5 @@ public class AtomicTest {
         System.out.println(test1);
         System.out.println(test1 == test2);
     }
+
 }

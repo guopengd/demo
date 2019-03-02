@@ -23,11 +23,11 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserRoleService roleService;
+    private UserRoleService roleService;
     @Autowired
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
 
     @RequestMapping(value = "customer/list", method = RequestMethod.POST)
     public Map<String, Object> list(@RequestBody Map<String, Object> params) {

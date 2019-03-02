@@ -2,7 +2,6 @@ package com.example.demo.common;
 
 import com.example.demo.handle.ErrorPageInterceptor;
 import com.example.demo.handle.TokenHandle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -19,9 +18,6 @@ import java.util.Arrays;
 
 @Configuration
 public class DefaultViewConfig implements WebMvcConfigurer {
-
-    @Autowired
-    ErrorPageInterceptor errorPageInterceptor;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -58,13 +54,18 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         return new TokenHandle();
     }
 
+    @Bean
+    public ErrorPageInterceptor getErrorPageInterceptor() {
+        return new ErrorPageInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 多个拦截器组成一个拦截器链; addPathPatterns 用于添加拦截规则; excludePathPatterns 用户排除拦截
         registry.addInterceptor(getTokenHandle())
                 .addPathPatterns("/**")
                 .excludePathPatterns(Arrays.asList("/", "/index", "/sys/createCode/{validUuid}", "/sys/login", "/sys/customer", "/view/**"));
-        registry.addInterceptor(errorPageInterceptor)
+        registry.addInterceptor(getErrorPageInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(Arrays.asList("/", "/index"));
     }

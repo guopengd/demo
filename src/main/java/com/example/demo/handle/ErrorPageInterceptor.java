@@ -1,6 +1,5 @@
 package com.example.demo.handle;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import java.util.List;
  * 错误页面拦截器
  * 替代EmbeddedServletContainerCustomizer在外部Tomcat中不起作用的方法
  */
-@Component
 public class ErrorPageInterceptor extends HandlerInterceptorAdapter {
     private List<Integer> errorCodeList = Arrays.asList(401, 403, 404, 500, 501);
 
@@ -24,6 +22,7 @@ public class ErrorPageInterceptor extends HandlerInterceptorAdapter {
             request.getRequestDispatcher("/").forward(request, response);
             return false;
         }
+
         return super.preHandle(request, response, handler);
     }
 }

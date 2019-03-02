@@ -18,7 +18,7 @@ import java.util.Map;
 public class LogController extends BaseController {
 
     @Autowired
-    LogService logService;
+    private LogService logService;
 
     @RequestMapping(value = "log/list", method = RequestMethod.POST)
     public PageUtils list(@RequestBody Map<String, Object> params) {

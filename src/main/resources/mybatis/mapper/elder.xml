@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ElderDao">
+
+    <select id="queryObject" resultType="ElderEntity">
+        select
+        `id` as `id`,
+        `user_id` as `userId`,
+        `name` as `name`,
+        `sex` as `sex`,
+        `age` as `age`,
+        `height` as `height`,
+        `weight` as `weight`,
+        `health` as `health`,
+        `description` as `description`,
+        `create_date` as `createDate`
+        from `sys_elder` where `id` = #{value}
+    </select>
+
+    <select id="queryList" resultType="ElderEntity">
+        select
+        `id` as `id`,
+        `user_id` as `userId`,
+        `name` as `name`,
+        `sex` as `sex`,
+        `age` as `age`,
+        `height` as `height`,
+        `weight` as `weight`,
+        `health` as `health`,
+        `description` as `description`,
+        `create_date` as `createDate`
+        from `sys_elder`
+        <where>
+            <if test="userId != null">
+                AND `user_id` = #{userId}
+            </if>
+            <if test="name != null and name.trim() != ''">
+                AND `username` like concat('%',#{username},'%')
+            </if>
+            <if test="sex != null">
+                AND `sex` = #{sex}
+            </if>
+            <if test="health != null">
+                AND `health` = #{health}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by `id` desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and rows != null">
+            limit #{offset}, #{rows}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from `sys_elder`
+        <where>
+            <if test="name != null and name.trim() != ''">
+                AND `username` like concat('%',#{username},'%')
+            </if>
+            <if test="sex != null">
+                AND `sex` = #{sex}
+            </if>
+            <if test="health != null">
+                AND `health` = #{health}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="ElderEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into `sys_elder`
+        (
+        `user_id`,
+        `name`,
+        `sex`,
+        `age`,
+        `height`,
+        `weight`,
+        `health`,
+        `description`,
+        `create_date`
+        )
+        values
+        (
+        #{userId},
+        #{name},
+        #{sex},
+        #{age},
+        #{height},
+        #{weight},
+        #{health},
+        #{description},
+        #{createDate}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="ElderEntity">
+        update `sys_elder`
+        <set>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="sex != null">`sex` = #{sex},</if>
+            <if test="age != null">`age` = #{age},</if>
+            <if test="height != null">`height` = #{height},</if>
+            <if test="weight != null">`weight` = #{weight},</if>
+            <if test="health != null">`health` = #{health},</if>
+            <if test="description != null">`description` = #{description},</if>
+            <if test="createDate != null">`create_date` = #{createDate}</if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from `sys_elder` where `id` = #{value}
+    </delete>
+
+</mapper>

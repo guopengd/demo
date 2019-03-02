@@ -25,9 +25,9 @@ import java.util.UUID;
 public class LoginController extends BaseController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    RedisUtil redisUtil;
+    private RedisUtil redisUtil;
 
     @RequestMapping(value = "sys/login", method = RequestMethod.POST)
     public Map login(@RequestBody CreateUserEntity user) {
@@ -96,8 +96,7 @@ public class LoginController extends BaseController {
         Object[] verify = VerifyUtil.createImage();
         //将验证码存入redis,并设置过期时间
         UUID uuid = UUID.randomUUID();
-        redisUtil.set(uuid.toString(), verify[0]);
-        redisUtil.expire(uuid.toString(), 60);
+        redisUtil.set(uuid.toString(), verify[0], 60);
         Map<String, Object> map = new HashMap<>();
         map.put("uuid", uuid);
         map.put("image", verify[1]);
