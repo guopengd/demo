@@ -1,8 +1,5 @@
 package com.example.demo.test;
 
-import net.coobird.thumbnailator.Thumbnails;
-
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -29,13 +26,6 @@ public class InterviewTest {
     }
 
     public static void main(String[] args) throws InterruptedException {
-
-        try {
-            Thumbnails.of("F/huhx.jpg").scale(1).outputQuality(0.8).toFile("F/huhx1.jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         int threads = 3;
         CountDownLatch countDownLatch = new CountDownLatch(threads);
         InnerClass innerClass = new InnerClass();
