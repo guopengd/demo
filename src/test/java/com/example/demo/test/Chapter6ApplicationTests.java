@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,6 +47,7 @@ public class Chapter6ApplicationTests {
 
     @Test
     public void RedisUtilTest() {
-        redisUtil.set("key", "value");
+
     }
+
 }

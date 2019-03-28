@@ -184,7 +184,9 @@ public class RegexUtil {
      * @author jiqinlin
      */
     public static boolean isMobile(String text) {
-        if (text.length() != 11) return false;
+        if (text.length() != 11) {
+            return false;
+        }
         return match(text, "^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\\d{8})$");
     }
 
@@ -327,12 +329,16 @@ public class RegexUtil {
      * @return
      */
     public static boolean isContainsSpecialChar(String text) {
-        if (StringUtils.isBlank(text)) return false;
+        if (StringUtils.isBlank(text)) {
+            return false;
+        }
         String[] chars = {"[", "`", "~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "|", "{", "}", "'",
                 ":", ";", "'", ",", "[", "]", ".", "<", ">", "/", "?", "~", "！", "@", "#", "￥", "%", "…", "&", "*", "（", "）",
                 "—", "+", "|", "{", "}", "【", "】", "‘", "；", "：", "”", "“", "’", "。", "，", "、", "？", "]"};
         for (String ch : chars) {
-            if (text.contains(ch)) return true;
+            if (text.contains(ch)) {
+                return true;
+            }
         }
         return false;
     }
@@ -409,8 +415,9 @@ public class RegexUtil {
      * @author jiqinlin
      */
     private static boolean match(String text, String reg) {
-        if (StringUtils.isBlank(text) || StringUtils.isBlank(reg))
+        if (StringUtils.isBlank(text) || StringUtils.isBlank(reg)) {
             return false;
+        }
         return Pattern.compile(reg).matcher(text).matches();
     }
 
