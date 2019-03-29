@@ -37,12 +37,18 @@ public class LoginAspect {
     @Autowired
     LogService logService;
 
-    //切入点
+    /**
+     * 切入点
+     */
     @Pointcut("@annotation(com.example.demo.annotation.SysLog)")
     public void logPointCut() {
     }
 
-    //前置通知
+    /**
+     * 前置通知
+     *
+     * @param joinPoint
+     */
     @Before("logPointCut()")
     public void before(JoinPoint joinPoint) {
         try {
@@ -52,7 +58,11 @@ public class LoginAspect {
         }
     }
 
-    //异常通知
+    /**
+     * 异常通知
+     *
+     * @param joinPoint
+     */
     @AfterThrowing("logPointCut()")
     public void afterThrowing(JoinPoint joinPoint) {
         try {
@@ -62,7 +72,12 @@ public class LoginAspect {
         }
     }
 
-    //通知方法封装
+    /**
+     * 通知方法封装
+     *
+     * @param joinPoint
+     * @param code
+     */
     public void logSave(JoinPoint joinPoint, AspectCode code) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

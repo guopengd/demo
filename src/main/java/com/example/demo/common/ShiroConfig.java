@@ -52,8 +52,8 @@ public class ShiroConfig {
         logger.info("注入Shiro的Web过滤器-->securityManager", ShiroFilterFactoryBean.class);
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(customRealm);
-        //注入缓存管理器;
-        securityManager.setCacheManager(getCacheManager());//这个如果执行多次，也是同样的一个对象;详情请看getTokenHandle
+        //注入缓存管理器;这个如果执行多次，也是同样的一个对象;详情请看getTokenHandle
+        securityManager.setCacheManager(getCacheManager());
         return securityManager;
     }
 

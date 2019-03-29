@@ -17,6 +17,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
+/**
+ * <p>
+ * 前端页面控制器
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 @Configuration
 public class DefaultViewConfig implements WebMvcConfigurer {
 
@@ -69,13 +77,17 @@ public class DefaultViewConfig implements WebMvcConfigurer {
                 .excludePathPatterns(Arrays.asList("/", "/index"));
     }
 
-    //配置跨域，以便前端使用admin开发
+    /**
+     * 配置跨域，以便前端使用admin开发
+     *
+     * @param registry
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:81", "http://localhost:8080")
+                .allowedOrigins("http://localhost:81", "http://localhost:8080", "http://localhost:80")
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
                 .exposedHeaders("Token")
-                .allowCredentials(true).maxAge(3600); //设置是否允许跨域传cookie
+                .allowCredentials(true).maxAge(3600);
     }
 }
