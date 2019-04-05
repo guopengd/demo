@@ -21,7 +21,7 @@ public class VerifyUtil {
     /**
      * 验证码字符集
      */
-    private static final char[] chars = {
+    private static final char[] CHARS = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -67,11 +67,11 @@ public class VerifyUtil {
         // 画随机字符
         Random ran = new Random();
         for (int i = 0; i < SIZE; i++) {
-            int n = ran.nextInt(chars.length);
+            int n = ran.nextInt(CHARS.length);
             graphic.setColor(getRandomColor());
             graphic.setFont(new Font(null, Font.BOLD + Font.ITALIC, FONT_SIZE));
-            graphic.drawString(chars[n] + "", i * WIDTH / SIZE, HEIGHT * 2 / 3);
-            sb.append(chars[n]);
+            graphic.drawString(CHARS[n] + "", i * WIDTH / SIZE, HEIGHT * 2 / 3);
+            sb.append(CHARS[n]);
         }
         // 画干扰线
         for (int i = 0; i < LINES; i++) {
