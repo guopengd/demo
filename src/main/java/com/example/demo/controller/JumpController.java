@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class JumpController extends BaseController {
 
     @RequestMapping("/{home}")
-    public String Router(@PathVariable("home") String home) {
+    public String router(@PathVariable("home") String home) {
         return home + ".html";
     }
 }
