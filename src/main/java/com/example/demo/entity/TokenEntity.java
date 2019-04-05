@@ -2,6 +2,14 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 
+/**
+ * <p>
+ * token实体类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class TokenEntity implements Serializable {
     /**
      * @Fields serialVersionUID : TODO
@@ -11,16 +19,20 @@ public class TokenEntity implements Serializable {
     private long timestamp;
 
     public TokenEntity(String signature, long timestamp) {
-        if (signature == null)
+        if (signature == null) {
             throw new IllegalArgumentException("signature can not be null");
+
+        }
 
         this.timestamp = timestamp;
         this.signature = signature;
     }
 
     public TokenEntity(String signature) {
-        if (signature == null)
+        if (signature == null) {
             throw new IllegalArgumentException("signature can not be null");
+
+        }
 
         this.signature = signature;
     }
@@ -38,14 +50,20 @@ public class TokenEntity implements Serializable {
 
     /**
      * timestamp 不予考虑, 因为就算 timestamp 不同也认为是相同的 token.
+     *
+     * @return
      */
+    @Override
     public int hashCode() {
         return signature.hashCode();
     }
 
+    @Override
     public boolean equals(Object object) {
-        if (object instanceof TokenEntity)
+        if (object instanceof TokenEntity) {
             return ((TokenEntity) object).signature.equals(this.signature);
+
+        }
         return false;
     }
 

@@ -18,6 +18,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 自定义realm
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class CustomRealm extends AuthorizingRealm {
 
     private static Logger logger = LoggerFactory.getLogger(CustomRealm.class);
@@ -44,7 +50,7 @@ public class CustomRealm extends AuthorizingRealm {
         if (!user.getPassword().equals(password)) {
             throw new IncorrectCredentialsException("密码错误");
         }
-        if (user.getStatus().intValue() == 0) {
+        if (user.getStatus() == 0) {
             throw new LockedAccountException("账号已被冻结");
         }
 
@@ -69,7 +75,7 @@ public class CustomRealm extends AuthorizingRealm {
         logger.info("==================开始获取权限操作符===================");
         // 获取redis中的缓存的用户角色和权限操作符
         Set<Object> redisRolesSet = redisUtil.sGet("shiro_roles_" + id);
-        String redisPerms = (String) redisUtil.get("shiro_perms_" + id);
+        StringBuilder redisPerms = new StringBuilder((String) redisUtil.get("shiro_perms_" + id));
 
         // 如果缓存中没有角色集合，则从数据库中获取；如果有，则返回redis中的集合
         if (redisRolesSet == null || redisRolesSet.size() == 0) {
@@ -77,37 +83,37 @@ public class CustomRealm extends AuthorizingRealm {
             // 将role集合存入redis，并设置过期时间
             redisUtil.sSet("shiro_roles_" + id, rolesList);
             redisUtil.expire("shiro_roles_" + id, 3600 * 24);
-            for (String roles : rolesList)
-                rolesSet.add(roles);
+            rolesSet.addAll(rolesList);
 
         } else {
-            for (Object roles : redisRolesSet)
+            for (Object roles : redisRolesSet) {
                 rolesSet.add(roles.toString());
+            }
         }
 
-        /**
+        /*
          * redis中没有权限操作符则从数据库中取出放入redis
          * 将所有权限操作符的进行拼接成String放入redis
          * redis中有缓存则将其取出放入set集合
          */
-        if (StringUtils.isBlank(redisPerms)) {
-            redisPerms = "";
+        if (StringUtils.isBlank(redisPerms.toString())) {
+            redisPerms = new StringBuilder();
             permsList = userService.queryAllPerms(id);
             for (String perms : permsList) {
                 if (StringUtils.isBlank(perms)) {
                     continue;
                 }
-                String[] PermsArray = perms.trim().split(",");
-                for (String daoPerms : PermsArray) {
-                    redisPerms += "," + daoPerms.trim();
+                String[] permsArray = perms.trim().split(",");
+                for (String daoPerms : permsArray) {
+                    redisPerms.append(",").append(daoPerms.trim());
                     permsSet.add(daoPerms);
                 }
             }
             // 将perms集合存入redis，并设置过期时间
-            redisUtil.set("shiro_perms_" + id, redisPerms.equals("") ? redisPerms : redisPerms.substring(1));
+            redisUtil.set("shiro_perms_" + id, "".equals(redisPerms.toString()) ? redisPerms.toString() : redisPerms.substring(1));
             redisUtil.expire("shiro_perms_" + id, 3600 * 24);
         } else {
-            permsSet.addAll(Arrays.asList(redisPerms.trim().split(",")));
+            permsSet.addAll(Arrays.asList(redisPerms.toString().trim().split(",")));
         }
 
         logger.info("==================获取权限操作符成功===================");

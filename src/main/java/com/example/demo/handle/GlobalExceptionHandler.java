@@ -17,8 +17,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 /**
+ * <p>
  * 全局异常处理
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -39,13 +45,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // 如果无法获取用户的subject，请用户先登录；
         // 如果获取到用了的subject，则显示无权限
         if (ShiroUtils.getUserEntity() == null) {
-            status = response.SC_UNAUTHORIZED;
+            status = HttpServletResponse.SC_UNAUTHORIZED;
             message.append("敏感操作，请先登录");
-            response.setStatus(response.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         } else {
-            status = response.SC_FORBIDDEN;
+            status = HttpServletResponse.SC_FORBIDDEN;
             message.append("您无权限访问此页面");
-            response.setStatus(response.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
 
         return new ErrorResponseEntity(status, message.toString());
@@ -61,9 +67,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(MyException.class)
     public ErrorResponseEntity MyExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
-        response.setStatus(response.SC_BAD_REQUEST);
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         MyException exception = (MyException) e;
-        return new ErrorResponseEntity(response.SC_BAD_REQUEST, exception.getMsg());
+        return new ErrorResponseEntity(HttpServletResponse.SC_BAD_REQUEST, exception.getMsg());
     }
 
     /**
@@ -76,12 +82,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param response response
      * @return 响应结果
      */
-/*    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ErrorResponseEntity runtimeExceptionHandler(HttpServletRequest request, final Exception e, HttpServletResponse response) {
-        response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         RuntimeException exception = (RuntimeException) e;
-        return new ErrorResponseEntity(response.SC_INTERNAL_SERVER_ERROR, exception.getMessage());
-    }*/
+        return new ErrorResponseEntity(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, exception.getMessage());
+    }
 
     /**
      * 通用的接口映射异常处理方

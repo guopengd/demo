@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0b6c50"],{"1f27":function(n,t,e){"use strict";e.r(t),e.d(t,"getMenuList",function(){return s});var u=e("66df"),s=function(){return u["default"].request({url:"sys/menu/list",method:"get"})}}}]);

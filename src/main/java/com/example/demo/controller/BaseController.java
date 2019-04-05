@@ -6,7 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
  * Controller公共组件
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class BaseController {
 

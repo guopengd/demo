@@ -14,6 +14,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+/**
+ * <p>
+ * 登录拦截，token验证
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class TokenHandle implements HandlerInterceptor {
 
     @Override
@@ -21,11 +29,19 @@ public class TokenHandle implements HandlerInterceptor {
         //从cookie中获取Token，如果不存在则从header中获取
         String token = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies != null)
-            for (Cookie cookie : cookies)
-                if (cookie.getName().equals("token")) token = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                }
 
-        if (token == null) token = request.getHeader("Token");
+            }
+        }
+
+
+        if (token == null) {
+            token = request.getHeader("Token");
+        }
         // 未登录时无token，跳转回登录页面
         if (StringUtils.isBlank(token)) {
             request.getRequestDispatcher("/index").forward(request, response);
@@ -51,8 +67,9 @@ public class TokenHandle implements HandlerInterceptor {
                 response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
                 output(outputMSg.toJSONString(), response);
                 return false;
+            default:
+                return false;
         }
-        return false;
     }
 
     public void output(String jsonStr, HttpServletResponse response) throws IOException {

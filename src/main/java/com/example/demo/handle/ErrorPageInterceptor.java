@@ -8,10 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
-
 /**
+ * <p>
  * 错误页面拦截器
  * 替代EmbeddedServletContainerCustomizer在外部Tomcat中不起作用的方法
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @Component
 public class ErrorPageInterceptor extends HandlerInterceptorAdapter {

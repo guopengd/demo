@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["ef73"],{ef73:function(n,e,t){"use strict";t.r(e),t.d(e,"showTitle",function(){return i});t("7f7f");var i=function(n,e){return e.$config.useI18n?e.$t(n.name):n.meta&&n.meta.title||n.name}}}]);

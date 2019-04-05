@@ -11,6 +11,9 @@ import java.util.Map;
 
 /**
  * 登录用户实现类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {

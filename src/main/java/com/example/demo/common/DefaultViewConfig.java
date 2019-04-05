@@ -2,7 +2,6 @@ package com.example.demo.common;
 
 import com.example.demo.handle.ErrorPageInterceptor;
 import com.example.demo.handle.TokenHandle;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -28,23 +27,12 @@ import java.util.Arrays;
 @Configuration
 public class DefaultViewConfig implements WebMvcConfigurer {
 
-    @Autowired
-    ErrorPageInterceptor errorPageInterceptor;
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
-    /**
-     * 为了响应ivew-admin的history模式，使url如显示为正常url而非hash模式
-     * 再此将401,404,500错误页面跳转回index.html，并在admin中设置错误页面
-     * 在springboot2.0之前用mbeddedServletContainerCustomizer类来实现该功能。
-     * 在Spring Boot2.0以上配置嵌入式Servlet容器时EmbeddedServletContainerCustomizer类不存在
-     * 被WebServerFactoryCustomizer替代
-     * PS:只对内嵌tomcat起作用
-     */
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
         return (container -> {
@@ -56,14 +44,14 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         });
     }
 
-    /**
-     * 踩过坑，如果addInterceptors直接new TokenHandle()，每次拦截获取的都是一个新的TokenHandle类
-     * 会导致无法在拦截器中注入bean，因为得到的不是容器已经注入过bean的TokenHandle
-     * 所以可以将TokenHandle设置为容器的bean，使其每次获取的为注入过bean的TokenHandle
-     */
     @Bean
     public TokenHandle getTokenHandle() {
         return new TokenHandle();
+    }
+
+    @Bean
+    public ErrorPageInterceptor getErrorPageInterceptor() {
+        return new ErrorPageInterceptor();
     }
 
     @Override
@@ -72,7 +60,7 @@ public class DefaultViewConfig implements WebMvcConfigurer {
         registry.addInterceptor(getTokenHandle())
                 .addPathPatterns("/**")
                 .excludePathPatterns(Arrays.asList("/", "/index", "/sys/createCode/{validUuid}", "/sys/login", "/sys/customer", "/view/**"));
-        registry.addInterceptor(errorPageInterceptor)
+        registry.addInterceptor(getErrorPageInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(Arrays.asList("/", "/index"));
     }
@@ -85,7 +73,7 @@ public class DefaultViewConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:81", "http://localhost:8080", "http://localhost:80")
+                .allowedOrigins("http://localhost:81", "http://localhost:8081")
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
                 .exposedHeaders("Token")
                 .allowCredentials(true).maxAge(3600);

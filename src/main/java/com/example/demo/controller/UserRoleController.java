@@ -12,21 +12,36 @@ import com.example.demo.utilty.MyException;
 import com.example.demo.utilty.PageUtils;
 import com.example.demo.utilty.Query;
 import com.example.demo.utilty.Res;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * <p>
+ * 用户权限管理控制层
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 @RestController
 @RequestMapping(value = "sys")
 public class UserRoleController extends BaseController {
 
-    @Autowired
-    UserRoleService roleService;
-    @Autowired
-    MenuService menuService;
-    @Autowired
-    RoleMenuService roleMenuService;
+    private final UserRoleService roleService;
+
+    private final MenuService menuService;
+
+    private final RoleMenuService roleMenuService;
+
+    public UserRoleController(UserRoleService roleService, MenuService menuService, RoleMenuService roleMenuService) {
+        this.roleService = roleService;
+        this.menuService = menuService;
+        this.roleMenuService = roleMenuService;
+    }
 
     @RequestMapping(value = "role/list", method = RequestMethod.POST)
     public PageUtils roleList(@RequestBody Map<String, Object> params) {

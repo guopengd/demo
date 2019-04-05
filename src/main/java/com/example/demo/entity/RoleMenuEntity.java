@@ -2,14 +2,28 @@ package com.example.demo.entity;
 
 import java.io.Serializable;
 
+/**
+ * <p>
+ * 用户角色菜单类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class RoleMenuEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    // 角色id
+
+    /**
+     * 角色id
+     */
     private Long roleId;
-    //拥有菜单Id
+
+    /**
+     * 拥有菜单Id
+     */
     private Long menuId;
 
     public Long getId() {

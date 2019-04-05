@@ -1,11 +1,23 @@
 package com.example.demo.entity;
 
+
 /**
+ * <p>
  * 全局异常回复实体类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class ErrorResponseEntity {
 
+    /**
+     * 错误code码
+     */
     private int code;
+    /**
+     * 错误信息
+     */
     private String message;
 
     public ErrorResponseEntity(int code, String message) {

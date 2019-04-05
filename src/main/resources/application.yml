@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  # tomcat:
+  #  accesslog:
+  #      buffered: true
+  #    directory: /data/product/demo
+  #      enabled: true
+  #     file-date-format: .yyyy-MM-dd
+  #    pattern: common
+  #    prefix: access_log
+  #     rename-on-rotate: false
+  #     request-attributes-enabled: false
+  #     rotate: true
+  #     suffix: .log
+
+spring:
+  #数据库连接池配置
+  datasource:
+    druid:
+      url: jdbc:mysql://203.195.239.90:3306/db_demo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: 648276765
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/templates/view/
+    suffix: .html
+    encoding: UTF-8
+    cache: false
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
+
+  #redis配置
+  redis:
+    database: 0
+    host: 203.195.239.90
+    port: 6379
+    password: 648276765
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 8
+        max-idle: 8
+        min-idle: 0
+
+  #jpa显示sql
+  jpa:
+    show-sql: true
+
+#mybatis的mapper映射
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  type-aliases-package: com.example.demo.entity
+
+

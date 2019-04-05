@@ -3,22 +3,47 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * <p>
+ * 日志实体类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class LogEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    // 用户名
+
+    /**
+     * 用户名
+     */
     private String username;
-    // 用户操作
+
+    /**
+     * 用户操作
+     */
     private String operation;
-    // 请求方法
+
+    /**
+     * 请求方法
+     */
     private String method;
-    // 请求参数
+
+    /**
+     * 请求参数
+     */
     private String params;
-    // IP地址
+
+    /**
+     * IP地址
+     */
     private String ip;
-    // 创建时间
+
+    /**
+     * 创建时间
+     */
     private Date createDate;
 
     public void setId(Long id) {

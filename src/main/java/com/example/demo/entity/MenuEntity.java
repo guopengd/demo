@@ -4,29 +4,64 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ * 菜单实体类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class MenuEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
     private Long id;
-    // 父菜单Id
+
+    /**
+     * 父菜单Id
+     */
     private Long parentId;
-    // 菜单跳转地址
+
+    /**
+     * 菜单跳转地址
+     */
     private String path;
-    // 菜单名称
+
+    /**
+     * 菜单名称
+     */
     private String name;
-    // 菜单标题
+
+    /**
+     * 菜单标题
+     */
     private String title;
-    // 菜单图标
+
+    /**
+     * 菜单图标
+     */
     private String icon;
-    // 菜单排序
+
+    /**
+     * 菜单排序
+     */
     private String order;
-    // 菜单url
+
+    /**
+     * 菜单url
+     */
     private String url;
-    // 菜单所需权限
+
+    /**
+     * 菜单所需权限
+     */
     private String perms;
-    // 子菜单
+
+    /**
+     * 子菜单
+     */
     private List<MenuEntity> children = new ArrayList<>();
 
     public Long getId() {

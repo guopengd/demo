@@ -10,7 +10,6 @@ import com.example.demo.utilty.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -18,16 +17,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>
+ * 用户管理控制层
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 @RestController
 @RequestMapping(value = "sys")
 public class UserController {
 
-    @Autowired
-    UserService userService;
-    @Autowired
-    UserRoleService roleService;
-    @Autowired
-    RedisUtil redisUtil;
+    private final UserService userService;
+
+    private final UserRoleService roleService;
+
+    private final RedisUtil redisUtil;
+
+    public UserController(UserService userService, UserRoleService roleService, RedisUtil redisUtil) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.redisUtil = redisUtil;
+    }
+
 
     @RequestMapping(value = "customer/list", method = RequestMethod.POST)
     public Map<String, Object> list(@RequestBody Map<String, Object> params) {

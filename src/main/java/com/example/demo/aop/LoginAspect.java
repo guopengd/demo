@@ -25,9 +25,13 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
- * 开启日志请务必让第一个参数可被JSON.parse转化的对象
+ * <p>
+ * 日志管理AOP
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
-
 @Aspect
 @Configuration
 public class LoginAspect {

@@ -12,6 +12,9 @@ import java.util.List;
 
 /**
  * 角色授权菜单实体类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @Service("RoleMenuService")
 public class RoleMenuServiceImpl implements RoleMenuService {
@@ -20,8 +23,8 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     RoleMenuDao roleMenuDao;
 
     @Override
-    public List<RoleMenuEntity> queryList(Object RoleId) {
-        return roleMenuDao.queryList(RoleId);
+    public List<RoleMenuEntity> queryList(Object roleId) {
+        return roleMenuDao.queryList(roleId);
     }
 
     @Override
@@ -35,7 +38,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
         return 1;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateRoleMenu(Long id, List<Long> ids) {
         // 查询出当前角色与菜单的所有实体对象
@@ -55,8 +58,9 @@ public class RoleMenuServiceImpl implements RoleMenuService {
                 delete.add(roleMenus.get(i).getId());
             }
         }
-        if (!delete.isEmpty())
+        if (!delete.isEmpty()) {
             roleMenuDao.deleteBatch(delete.toArray());
+        }
         // 查询出角色需要新增的权限进行添加
         for (Long i : ids) {
             if (!roleId.contains(i)) {

@@ -7,18 +7,29 @@ import com.example.demo.utilty.PageUtils;
 import com.example.demo.utilty.Query;
 import com.example.demo.utilty.Res;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>
+ * 日志控制层
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 @RequestMapping("sys")
 @RestController
 public class LogController extends BaseController {
 
-    @Autowired
-    LogService logService;
+    final
+    private LogService logService;
+
+    public LogController(LogService logService) {
+        this.logService = logService;
+    }
 
     @RequestMapping(value = "log/list", method = RequestMethod.POST)
     public PageUtils list(@RequestBody Map<String, Object> params) {
@@ -42,8 +53,9 @@ public class LogController extends BaseController {
     @RequiresPermissions("log:delete")
     @RequestMapping(value = "log/delete", method = RequestMethod.POST)
     public Res deleteBatch(@RequestBody Long[] ids) {
-        if (ids == null || ids.length == 0)
+        if (ids == null || ids.length == 0) {
             throw new MyException("获取id失败");
+        }
 
         logService.deleteBatch(ids);
         return Res.ok("批量删除成功");

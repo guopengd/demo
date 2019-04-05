@@ -5,12 +5,14 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import net.minidev.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * JWT工具类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class JwtToken {
 
@@ -27,9 +29,13 @@ public class JwtToken {
      * "type":"JWT"
      * }
      */
-    private static final JWSHeader header = new JWSHeader(JWSAlgorithm.HS256, JOSEObjectType.JWT, null, null, null, null, null, null, null, null, null, null, null);
+    private static final JWSHeader HEADER = new JWSHeader(JWSAlgorithm.HS256, JOSEObjectType.JWT, null, null, null, null, null, null, null, null, null, null, null);
 
-    private static final int INTERVAL = 7;// token过期时间间隔 天
+    /**
+     * token过期时间间隔 天
+     */
+    private static final int INTERVAL = 7;
+
     private static volatile JwtToken jwtToken = null;
 
     private JwtToken() {
@@ -57,7 +63,7 @@ public class JwtToken {
         payload.put("iat", now);
         payload.put("ext", now + INTERVAL * 1000 * 60 * 60 * 24);
         // 创建一个 JWS object
-        JWSObject jwsObject = new JWSObject(header, new Payload(new JSONObject(payload)));
+        JWSObject jwsObject = new JWSObject(HEADER, new Payload(new JSONObject(payload)));
         try {
             // 将jwsObject 进行HMAC签名
             jwsObject.sign(new MACSigner(SECRET));
@@ -75,10 +81,10 @@ public class JwtToken {
      * 该方法在过滤器中调用，每次请求API时都校验
      *
      * @param token
-     * @return Map<String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Object>
+     * @return Map<String, Object>
      */
     public static Map<String, Object> validToken(String token) {
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>(16);
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             Payload payload = jwsObject.getPayload();
@@ -91,7 +97,7 @@ public class JwtToken {
                 // 若payload包含ext字段，则校验是否过期
                 if (jsonOBj.containsKey("ext")) {
                     long extTime = Long.valueOf(jsonOBj.get("ext").toString());
-                    long curTime = new Date().getTime();
+                    long curTime = System.currentTimeMillis();
                     // 过期了
                     if (curTime > extTime) {
                         resultMap.clear();
@@ -106,7 +112,7 @@ public class JwtToken {
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
+
             // token格式不合法导致的异常
             resultMap.clear();
             resultMap.put("state", TokenState.INVALID.toString());

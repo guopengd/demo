@@ -7,6 +7,9 @@ import org.apache.shiro.subject.Subject;
 
 /**
  * Shiro工具类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class ShiroUtils {
 

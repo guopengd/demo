@@ -12,6 +12,9 @@ import java.util.Map;
 
 /**
  * 系统日志实现类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @Service("logService")
 public class LogServiceImpl implements LogService {

@@ -3,16 +3,33 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * <p>
+ * 用户角色实体类
+ * </p>
+ *
+ * @author gpd
+ * @date 2019/3/29
+ */
 public class UserRoleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    // 角色名称
+
+    /**
+     * 角色名称
+     */
     private String roleName;
-    // 角色描述
+
+    /**
+     * 角色描述
+     */
     private String describe;
-    // 创建日期
+
+    /**
+     * 创建日期
+     */
     private Date createDate;
 
     public Long getId() {

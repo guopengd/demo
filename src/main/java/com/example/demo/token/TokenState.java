@@ -2,6 +2,9 @@ package com.example.demo.token;
 
 /**
  * 枚举，定义token的三种状态
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public enum TokenState {
     /**
@@ -26,7 +29,7 @@ public enum TokenState {
     /**
      * 根据状态字符串获取token状态枚举对象
      *
-     * @param tokenState
+     * @param tokenState token状态
      * @return
      */
     public static TokenState getTokenState(String tokenState) {
@@ -41,6 +44,7 @@ public enum TokenState {
         return ts;
     }
 
+    @Override
     public String toString() {
         return this.state;
     }
