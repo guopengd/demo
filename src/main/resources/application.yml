@@ -1,17 +1,19 @@
 server:
   port: 8080
-  # tomcat:
-  #  accesslog:
-  #      buffered: true
-  #    directory: /data/product/demo
-  #      enabled: true
-  #     file-date-format: .yyyy-MM-dd
-  #    pattern: common
-  #    prefix: access_log
-  #     rename-on-rotate: false
-  #     request-attributes-enabled: false
-  #     rotate: true
-  #     suffix: .log
+  connection-timeout: 1000ms
+  compression:
+    enabled: true
+  tomcat:
+    max-threads: 100
+    max-connections: 10
+    min-spare-threads: 5
+    uri-encoding: UTF-8
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        domain: /
+  max-http-header-size: 10KB
 
 spring:
   #数据库连接池配置
@@ -55,5 +57,3 @@ spring:
 mybatis:
   mapper-locations: classpath*:mybatis/mapper/*.xml
   type-aliases-package: com.example.demo.entity
-
-
