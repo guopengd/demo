@@ -5,6 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 自定义访问对象工具类
  * 获取对象的IP地址等信息
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class CusAccessObjectUtil {
 
@@ -15,7 +18,7 @@ public class CusAccessObjectUtil {
      * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130,192.168.1.100
      * 用户真实IP为： 192.168.1.110
      *
-     * @param request
+     * @param request request
      * @return
      */
     public static String getIpAddress(HttpServletRequest request) {

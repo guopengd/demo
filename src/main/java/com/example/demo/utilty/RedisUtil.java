@@ -12,8 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Redis工具类
- * ps:本想做成静态工具类，奈何静态工具类不能@Autowired静态redisTemplate
- * 网上搜寻半天无果后只能退而求次，每次使用依赖此类进去
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 @Component
 public class RedisUtil {

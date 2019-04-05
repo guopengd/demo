@@ -5,6 +5,9 @@ import java.util.Map;
 
 /**
  * 平台统一返回格式
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class Res extends HashMap<String, Object> {
 
@@ -45,6 +48,7 @@ public class Res extends HashMap<String, Object> {
         return new Res();
     }
 
+    @Override
     public Res put(String key, Object value) {
         super.put(key, value);
         return this;

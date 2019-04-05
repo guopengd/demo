@@ -2,18 +2,25 @@ package com.example.demo.utilty;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 分页工具类
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class PageUtils implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // 列表数据
+    /**
+     * 列表数据
+     */
     private List<?> rows;
-    // 分页数据
+
+    /**
+     * 分页数据
+     */
     private Integer total;
 
     /**

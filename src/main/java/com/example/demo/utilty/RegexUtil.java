@@ -1,18 +1,18 @@
 package com.example.demo.utilty;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Java表单验证工具类
  *
- * @author jiqinlin
+ * @author gpd
+ * @date 2019/3/29
  */
-
 public class RegexUtil {
 
     public static boolean isNull(Object[] objs) {

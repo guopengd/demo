@@ -2,6 +2,9 @@ package com.example.demo.utilty;
 
 /**
  * 自定义异常
+ *
+ * @author gpd
+ * @date 2019/3/29
  */
 public class MyException extends RuntimeException {
 
