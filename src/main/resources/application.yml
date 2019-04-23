@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
   connection-timeout: 1000ms
   compression:
     enabled: true
@@ -12,7 +12,6 @@ server:
     session:
       cookie:
         http-only: true
-        domain: /
   max-http-header-size: 10KB
 
 spring:

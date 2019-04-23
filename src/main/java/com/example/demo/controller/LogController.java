@@ -24,8 +24,7 @@ import java.util.Map;
 @RestController
 public class LogController extends BaseController {
 
-    final
-    private LogService logService;
+    private final LogService logService;
 
     public LogController(LogService logService) {
         this.logService = logService;
