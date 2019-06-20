@@ -1,5 +1,7 @@
 package com.example.demo.test;
 
+import com.example.demo.DemoEntity;
+import com.example.demo.entity.CreateUserEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.utilty.RedisUtil;
 import org.junit.Test;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,15 @@ public class Chapter6ApplicationTests {
 
     @Test
     public void RedisUtilTest() {
+        boolean flag = StringUtils.equals(new StringBuffer(), new StringBuilder());
+        System.out.println(flag);
+    }
 
+    @Test
+    public void AspectTest() {
+        CreateUserEntity userEntity = new CreateUserEntity();
+        Long id = userEntity.getId();
+        System.out.println(id);
     }
 
 }
