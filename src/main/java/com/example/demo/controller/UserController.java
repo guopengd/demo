@@ -7,7 +7,7 @@ import com.example.demo.entity.UserRoleEntity;
 import com.example.demo.service.UserRoleService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilty.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.web.bind.annotation.*;

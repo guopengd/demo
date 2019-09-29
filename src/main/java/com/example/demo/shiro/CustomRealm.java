@@ -3,7 +3,7 @@ package com.example.demo.shiro;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.service.impl.UserServiceImpl;
 import com.example.demo.utilty.RedisUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;

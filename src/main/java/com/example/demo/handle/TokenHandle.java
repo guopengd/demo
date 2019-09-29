@@ -3,7 +3,7 @@ package com.example.demo.handle;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.token.JwtToken;
 import com.example.demo.token.TokenState;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
