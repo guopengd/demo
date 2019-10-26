@@ -26,7 +26,7 @@
         <mysql-version>5.1.25</mysql-version>
         <fastjson-version>1.2.30</fastjson-version>
         <jjwt-version>0.7.0</jjwt-version>
-        <nimbusds-jwt-sersion>6.6</nimbusds-jwt-sersion>
+        <nimbusds-jwt-version>7.6</nimbusds-jwt-sersion>
         <java-jwt-version>3.1.0</java-jwt-version>
         <urlrewritefilter-version>4.0.4</urlrewritefilter-version>
         <shiro-spring-version>1.4.0</shiro-spring-version>
